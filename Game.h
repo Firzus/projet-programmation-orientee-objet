@@ -1,12 +1,14 @@
 #pragma once
 #include <iostream>
 
-#include "Map.h"
+#include "Dungeon.h"
 
 class Game
 {
-	// attributs
 	bool isPlaying;
+
+	Dungeon dungeon;
+
 public:
 	Game();
 	~Game();

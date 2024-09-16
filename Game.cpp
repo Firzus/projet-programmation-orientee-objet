@@ -10,8 +10,10 @@ Game::~Game(){}
 void Game::init()
 {
 	// Initialization game
+    dungeon.loadRoom();
 
 	// then -> play the game
+	playTurn();
 }
 
 void Game::playTurn()
@@ -22,8 +24,12 @@ void Game::playTurn()
 
     while (isPlaying) { // && hero.isAlive()
         // 1. Clear Screen in map class
+		system("cls");
 
         // 2. Affiche l'état actuel du jeu
+        for (std::string line : dungeon.getCurrentRoom()) {
+            std::cout << line << std::endl;
+        }
 
         // 3. Demande une action au joueur
 
@@ -51,7 +57,7 @@ void Game::playTurn()
 
 			// Si le dernier monstre du donjon est mort le jeu affiche un message de victoire
             break;
-        case 'y':
+        case 'p':
             isPlaying = false;
             break;
         default:
