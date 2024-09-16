@@ -6,6 +6,7 @@
 class Game
 {
 	bool isPlaying;
+
 	Dungeon dungeon;
 
 public:

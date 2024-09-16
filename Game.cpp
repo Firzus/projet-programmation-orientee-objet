@@ -2,8 +2,6 @@
 
 Game::Game()
 {
-	std::cout << "Game started" << std::endl;
-
 	init();
 }
 
@@ -14,12 +12,8 @@ void Game::init()
 	// Initialization game
     dungeon.loadRoom();
 
-    // affiche la map actuelle
-	for (std::string line : dungeon.getCurrentRoom()) {
-		std::cout << line << std::endl;
-	}
-
 	// then -> play the game
+	playTurn();
 }
 
 void Game::playTurn()
@@ -30,8 +24,12 @@ void Game::playTurn()
 
     while (isPlaying) { // && hero.isAlive()
         // 1. Clear Screen in map class
+		system("cls");
 
         // 2. Affiche l'état actuel du jeu
+        for (std::string line : dungeon.getCurrentRoom()) {
+            std::cout << line << std::endl;
+        }
 
         // 3. Demande une action au joueur
 

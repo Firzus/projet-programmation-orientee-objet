@@ -11,8 +11,8 @@ void Dungeon::loadRoom()
 {
     // TODO: Change maps values
     std::vector<std::string> roomOne = readRoom("room-one.txt");
-    std::vector<std::string> roomTwo = readRoom("room-one.txt");
-    std::vector<std::string> roomThree = readRoom("room-one.txt");
+    std::vector<std::string> roomTwo = readRoom("room-two.txt");
+    std::vector<std::string> roomThree = readRoom("room-three.txt");
 
     map.push_back(roomOne);
     map.push_back(roomTwo);

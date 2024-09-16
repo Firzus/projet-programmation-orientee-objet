@@ -137,6 +137,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="room-one.txt" />
+    <Text Include="room-three.txt" />
+    <Text Include="room-two.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
