@@ -7,6 +7,7 @@ class Game
 {
 	// attributs
 	bool isPlaying;
+	Map map;
 public:
 	Game();
 	~Game();

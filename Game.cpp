@@ -10,6 +10,8 @@ Game::~Game(){}
 void Game::init()
 {
 	// Initialization game
+	map.readFileMap();
+	map.displayMap();
 
 	// then -> play the game
 }
