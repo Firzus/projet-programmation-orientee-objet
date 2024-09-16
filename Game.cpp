@@ -2,6 +2,8 @@
 
 Game::Game()
 {
+	std::cout << "Game started" << std::endl;
+
 	init();
 }
 
@@ -10,8 +12,12 @@ Game::~Game(){}
 void Game::init()
 {
 	// Initialization game
-	map.readFileMap();
-	map.displayMap();
+    dungeon.loadRoom();
+
+    // affiche la map actuelle
+	for (std::string line : dungeon.getCurrentRoom()) {
+		std::cout << line << std::endl;
+	}
 
 	// then -> play the game
 }
@@ -53,7 +59,7 @@ void Game::playTurn()
 
 			// Si le dernier monstre du donjon est mort le jeu affiche un message de victoire
             break;
-        case 'y':
+        case 'p':
             isPlaying = false;
             break;
         default:
