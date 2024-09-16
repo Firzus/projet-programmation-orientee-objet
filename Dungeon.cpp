@@ -3,6 +3,8 @@
 Dungeon::Dungeon()
 {
     index = 0;
+
+	loadRoom();
 }
 
 Dungeon::~Dungeon(){}

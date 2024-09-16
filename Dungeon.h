@@ -22,4 +22,3 @@ public:
 	std::vector<std::vector<std::string>> getMap() { return map; }
 	std::vector<std::string> getCurrentRoom();
 };
-

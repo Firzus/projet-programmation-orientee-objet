@@ -2,12 +2,9 @@
 
 #include "Entity.h"
 
-class Hero : Entity
+class Hero : public Entity
 {
-
 public:
-
 	Hero();
 	~Hero();
 };
-

@@ -9,8 +9,9 @@ Game::~Game(){}
 
 void Game::init()
 {
-	// Initialization game
-    dungeon.loadRoom();
+    // Init Hero
+	
+    // Init Monsters
 
 	// then -> play the game
 	playTurn();
@@ -18,75 +19,80 @@ void Game::init()
 
 void Game::playTurn()
 {
-	// Turn logic
-
-	isPlaying = true;
+    isPlaying = true;
 
     while (isPlaying) { // && hero.isAlive()
-        // 1. Clear Screen in map class
-		system("cls");
+        // Draw the map
 
-        // 2. Affiche l'état actuel du jeu
+        // - Clear the console
+        system("cls");
+
+        // - Display map current state
         for (std::string line : dungeon.getCurrentRoom()) {
             std::cout << line << std::endl;
         }
 
-        // 3. Demande une action au joueur
-
+        // Demande une action au joueur
         char action;
 
-        std::cout << "Choose action: (z/q/s/d) move, (enter), (q)uit: ";
-        std::cin >> action;
+        std::cout << "Choose action: (arrow keys) move, (f)ight, (p)ause: ";
+        action = _getch();
 
         // Gestion des actions du joueur
-        switch (action) {
-        case 'z':
-            // Move up
-            break;
-        case 's':
-            // Move down
-            break;
-        case 'q':
-            // Move left
-            break;
-        case 'd':
-            // Move right
-            break;
-        case 'f':
-			// Fight monster if adjacent else do nothing just moove
+        if (action == -32) {
+            action = _getch(); // Lire la touche suivante
+            switch (action) {
+            case 72: // Move up
+                std::cout << "Move up" << std::endl;
 
-			// Si le dernier monstre du donjon est mort le jeu affiche un message de victoire
-            break;
-        case 'p':
-            isPlaying = false;
-            break;
-        default:
-            std::cout << "Invalid action! Please try again." << std::endl;
-            break;
-        }
+                std::cout << "Press any key to continue..." << std::endl;
+                std::cin.get(); // Pause
+                break;
+            case 80: // Move down
+                std::cout << "Move down" << std::endl;
 
-        // Si le monstre est toujours en vie, il réagit
-		if (true) { // monster.isAlive() == true
-            // 1. Le monstre se déplace vers le héros
-			if (true) { // Si le monstre est adjacent au héros
-                // Le monstre attaque s'il est adjacent au héros
+                std::cout << "Press any key to continue..." << std::endl;
+                std::cin.get(); // Pause
+                break;
+            case 75: // Move left
+                std::cout << "Move left" << std::endl;
+
+                std::cout << "Press any key to continue..." << std::endl;
+                std::cin.get(); // Pause
+                break;
+            case 77: // Move right
+                std::cout << "Move right" << std::endl;
+
+                std::cout << "Press any key to continue..." << std::endl;
+                std::cin.get(); // Pause
+                break;
             }
         }
+        else {
+            // Autres touches
+            switch (action) {
+            case 'f':
+                std::cout << "Fight!" << std::endl;
+                break;
+            case 'p':
+                isPlaying = false;
+                break;
+            case ' ':
+                std::cout << "Special action triggered by space key!" << std::endl;
 
-        // Si le héros est mort, le jeu se termine
-		if (true) { // hero.isAlive() == false
-            std::cout << "Game Over! The hero has fallen." << std::endl;
-            isPlaying = false;
+                std::cout << "Press any key to continue..." << std::endl;
+                std::cin.get(); // Pause
+                break;
+            default:
+                std::cout << "Invalid action! Please try again." << std::endl;
+                break;
+            }
         }
     }
-
-	endGame();
 }
 
 void Game::endGame()
 {    
-	// Recommence le jeu en retournant à la première salle
-
 	// Affiche un message de fin de jeu temporaire
 	std::cout << "End Game" << std::endl;
 

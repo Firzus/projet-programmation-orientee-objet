@@ -129,16 +129,24 @@
   <ItemGroup>
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Dungeon.cpp" />
+    <ClCompile Include="Faucheur.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Golem.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Spectre.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Faucheur.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Golem.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Dungeon.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="Spectre.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="room-one.txt" />
