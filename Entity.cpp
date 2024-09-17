@@ -38,7 +38,8 @@ void Entity::move(int x, int y)
 	posY += y;
 }
 
+// Logic to attack target
 void Entity::attack(Entity target)
 {
-	// Logic to attack target
+	target.life -= power;
 }
