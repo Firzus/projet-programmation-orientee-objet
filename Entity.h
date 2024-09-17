@@ -20,7 +20,8 @@ public:
 
 	bool isAlive();
 	void move(int x, int y);
-	void attack(Entity target);
+	void takeDamage(int damage);
+	int returnPower();
 	void setPos(std::vector<std::string> currentRoom);
 	int getPosX() const;
 	int getPosY() const;

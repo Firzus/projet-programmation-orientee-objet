@@ -97,6 +97,9 @@ void Game::playTurn()
 
                 if (_getch() == 13)
                 {
+                    // Update player position
+                    dungeon.updatePlayerPosition(hero.getPosX(), hero.getPosY(), newPosX, newPosY);
+
                     hero.move(newPosX, newPosY);
 
 					std::cout << "New Post : " << hero.getPosX() << " " << hero.getPosY() << std::endl;
@@ -109,13 +112,23 @@ void Game::playTurn()
 
 				break;
             case 'S':
-				std::cout << "Symbole : Spectre" << std::endl;
-				break;
-			case 'G':
-				std::cout << "Symbole : Golem" << std::endl;
-				break;
-			case 'F':
-				std::cout << "Symbole : Faucheur" << std::endl;
+            case 'G':
+            case 'F':
+
+                if (_getch() == 13)
+                {
+                    // Get the ennemy
+                    Entity ennemy;
+
+                    // Attack the ennemy
+                    ennemy.takeDamage(hero.returnPower());
+
+                    // Chat message
+                    std::cout << "Vous avez inflige " << hero.returnPower() << " a l'ennemi !" << std::endl;
+                }
+                else return;
+
+
 				break;
             default:
                 std::cout << "Erreur symbole non detecte" << std::endl;
@@ -134,17 +147,8 @@ void Game::playTurn()
         else {
             // Autres touches
             switch (action) {
-            case 'f':
-                std::cout << "Fight!" << std::endl;
-                break;
-            case 'p':
+            case 112:
                 isPlaying = false;
-                break;
-            case ' ':
-                std::cout << "Special action triggered by space key!" << std::endl;
-
-                std::cout << "Press any key to continue..." << std::endl;
-                std::cin.get(); // Pause
                 break;
             default:
                 std::cout << "Invalid action! Please try again." << std::endl;

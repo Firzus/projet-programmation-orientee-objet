@@ -39,9 +39,25 @@ void Entity::move(int x, int y)
 }
 
 // Logic to attack target
-void Entity::attack(Entity target)
+void Entity::takeDamage(int damage)
 {
-	target.life -= power;
+	// Do damages
+	if (life >= damage)
+	{
+		life -= damage;
+	}
+	else
+	{
+		life == 0;
+	}
+
+	// Check if entity is still alive
+	isAlive();
+}
+
+int Entity::returnPower()
+{
+	return power;
 }
 
 int Entity::getPosX() const

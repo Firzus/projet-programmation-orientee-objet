@@ -21,4 +21,5 @@ public:
 	int getIndex() const { return index; }
 	std::vector<std::vector<std::string>> getMap() { return map; }
 	std::vector<std::string> getCurrentRoom();
+	void updatePlayerPosition(int oldHeroPosX, int oldHeroPosY, int heroPosX, int heroPosY);
 };
