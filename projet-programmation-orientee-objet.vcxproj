@@ -143,7 +143,6 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Golem.h" />
     <ClInclude Include="Hero.h" />
-    <ClInclude Include="Map.h" />
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Spectre.h" />

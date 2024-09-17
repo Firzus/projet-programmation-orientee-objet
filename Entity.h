@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+#include <string>
+
 class Entity
 {
 protected:
@@ -16,5 +19,9 @@ protected:
 public:
 	Entity();
 	~Entity();
+
+	bool isAlive();
+
+	void setPos(std::vector<std::string> currentRoom);
 };
 

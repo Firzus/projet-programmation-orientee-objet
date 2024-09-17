@@ -4,6 +4,34 @@ Entity::Entity() : posX(0), posY(0), symbol('E'), life(100), power(50), movement
 
 Entity::~Entity() {}
 
+bool Entity::isAlive()
+{
+	if (life > 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void Entity::setPos(std::vector<std::string> currentRoom)
+{
+	for (int line = 0; line < currentRoom.size() ; line++)
+	{
+		for (int actualSymbol = 0 ; actualSymbol < currentRoom[line].size() ; actualSymbol++)
+		{
+			if (actualSymbol == symbol)
+			{
+				posX = actualSymbol;
+				posY = line;
+			}
+		}
+	}
+}
+
+
 void Entity::move(int x, int y)
 {
 	posX += x;
