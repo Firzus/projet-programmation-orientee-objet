@@ -20,7 +20,8 @@ public:
 	bool isAlive() const;
 	void move(int x, int y);
 	void takeDamage(int damage);
-	int returnPower();
+	int getPower() { return power; }
+	int getLife() { return life; }
 	int getPosX() const;
 	int getPosY() const;
 };

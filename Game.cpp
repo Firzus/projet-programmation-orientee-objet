@@ -58,7 +58,7 @@ void Game::playTurn()
 
     while (isPlaying && hero.isAlive()) {
         // - Clear the console
-        //system("cls");
+        system("cls");
 
         // - Display map current state
         for (std::string line : dungeon.getCurrentRoom()) {
@@ -127,7 +127,7 @@ void Game::playTurn()
             switch (symbol)
             {
             case '.':
-				std::cout << "En attente de confirmation" << std::endl;
+				std::cout << "En attente de confirmation de déplacement (enter)" << std::endl;
 
                 if (_getch() == 13)
                 {
@@ -146,22 +146,22 @@ void Game::playTurn()
 
 				break;
             case 'S':
-            case 'G':
-            case 'F':
-
+			case 'G':
+			case 'F':
+                std::cout << "Vous confirmez attaquer la cible ? (enter)" << std::endl;
                 if (_getch() == 13)
                 {
                     // Get the ennemy the hero point at
                     Entity* ennemy = getEntityAtPosition(newPosX, newPosY);
 
                     // Attack the ennemy
-                    ennemy->takeDamage(hero.returnPower());
+                    ennemy->takeDamage(hero.getPower());
 
                     // Chat message
-                    std::cout << "Vous avez inflige " << hero.returnPower() << " a l'ennemi !" << std::endl;
+                    std::cout << "Vous avez inflige " << hero.getPower() << " a l'ennemi !" << std::endl;
+					std::cout << "L'ennemi a maintenant " << ennemy->getLife() << " points de vie." << std::endl;
                 }
                 else return;
-
 
 				break;
             default:
@@ -174,9 +174,6 @@ void Game::playTurn()
             isWatchingLeft = false;
             isWatchingRight = false;
             isWatchingUp = false;
-
-            std::cout << "Press any key to continue..." << std::endl;
-            std::cin.get(); // Pause
         }
         else {
             // Autres touches

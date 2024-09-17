@@ -22,11 +22,6 @@ void Entity::move(int x, int y)
 	posY = y;
 }
 
-int Entity::returnPower()
-{
-	return power;
-}
-
 void Entity::takeDamage(int damage)
 {
 	life -= damage;
