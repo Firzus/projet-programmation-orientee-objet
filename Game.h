@@ -8,7 +8,11 @@
 
 class Game
 {
-	bool isPlaying;
+	bool isPlaying = false;
+	bool isWatchingUp = false;
+	bool isWatchingDown = false;
+	bool isWatchingLeft = false;
+	bool isWatchingRight = false;
 
 	Dungeon dungeon;
 	Hero hero;

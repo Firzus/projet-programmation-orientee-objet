@@ -1,6 +1,6 @@
 #include "Hero.h"
 
-Hero::Hero() 
+Hero::Hero()
 {
 	posX = 0;
 	posY = 0;

@@ -15,10 +15,10 @@ public:
 	~Dungeon();
 
 	void loadRoom();
+	void nextRoom();
+	char checkPosition(int posX, int posY);
 	std::vector<std::string> readRoom(std::string fileName);
-
-	int getIndex() { return index; }
-	void setIndex(int index) { this->index = index; }
+	int getIndex() const { return index; }
 	std::vector<std::vector<std::string>> getMap() { return map; }
 	std::vector<std::string> getCurrentRoom();
 };
