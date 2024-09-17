@@ -21,7 +21,7 @@ public:
 	~Entity();
 
 	bool isAlive();
-
 	void setPos(std::vector<std::string> currentRoom);
+	int getPosX() const;
+	int getPosY() const;
 };
-

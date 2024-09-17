@@ -16,6 +16,7 @@ public:
 
 	void loadRoom();
 	void nextRoom();
+	char checkPosition(int posX, int posY);
 	std::vector<std::string> readRoom(std::string fileName);
 	int getIndex() const { return index; }
 	std::vector<std::vector<std::string>> getMap() { return map; }

@@ -47,3 +47,19 @@ void Dungeon::nextRoom()
 {
 	index++;
 }
+
+char Dungeon::checkPosition(int posX, int posY)
+{
+    if (index < 0 || index >= map.size()) {
+        std::cerr << "Erreur : index de salle invalide" << std::endl;
+        return '\0';
+    }
+
+    const std::vector<std::string>& currentRoom = map[index];
+    if (posY < 0 || posY >= currentRoom.size() || posX < 0 || posX >= currentRoom[posY].size()) {
+        std::cerr << "Erreur : coordonnées invalides" << std::endl;
+        return '\0';
+    }
+
+    return currentRoom[posY][posX];
+}

@@ -10,6 +10,7 @@ Game::~Game(){}
 void Game::init()
 {
     // Init Hero
+	hero.setPos(dungeon.getCurrentRoom());
 	
     // Init Monsters
 
@@ -21,7 +22,7 @@ void Game::playTurn()
 {
     isPlaying = true;
 
-    while (isPlaying) { // && hero.isAlive()
+    while (isPlaying && hero.isAlive()) {
         // - Clear the console
         system("cls");
 
@@ -42,10 +43,8 @@ void Game::playTurn()
             switch (action) {
             case 72: // Move up
                 std::cout << "Choose up direction" << std::endl;
-                // Set pos x, y
+				isWatchingUp = true;
 
-                std::cout << "Press any key to continue..." << std::endl;
-                std::cin.get(); // Pause
                 break;
             case 80: // Move down
                 std::cout << "Choose down direction" << std::endl;
@@ -65,10 +64,72 @@ void Game::playTurn()
                 std::cout << "Choose right direction" << std::endl;
                 // Set pos x, y
 
+
                 std::cout << "Press any key to continue..." << std::endl;
                 std::cin.get(); // Pause
                 break;
             }
+
+            // Pos player
+			std::cout << "Position du joueur : " << hero.getPosX() << " " << hero.getPosY() << std::endl;
+
+			// Moove Player
+            int newPosX = 0;
+			int newPosY = 0;
+
+            if (isWatchingUp)
+            {
+                newPosY = hero.getPosY() - 1;
+				newPosX = hero.getPosX();
+            }
+			else if (isWatchingDown)
+			{
+				newPosY = hero.getPosY() + 1;
+                newPosX = hero.getPosX();
+			}
+			else if (isWatchingLeft)
+			{
+				newPosX = hero.getPosX() + 1;
+				newPosY = hero.getPosY();
+			}
+			else if (isWatchingRight)
+			{
+                newPosX = hero.getPosX() - 1;
+                newPosY = hero.getPosY();
+			}
+
+            char symbol = dungeon.checkPosition(newPosX, newPosY);
+
+            switch (symbol)
+            {
+            case '.':
+                std::cout << "Symbole : vide" << std::endl;
+                break;
+            case '#':
+				std::cout << "Symbole : mur" << std::endl;
+				break;
+            case 'S':
+				std::cout << "Symbole : Spectre" << std::endl;
+				break;
+			case 'G':
+				std::cout << "Symbole : Golem" << std::endl;
+				break;
+			case 'F':
+				std::cout << "Symbole : Faucheur" << std::endl;
+				break;
+            default:
+                std::cout << "Erreur symbole non detecte" << std::endl;
+                break;
+            }
+
+            // Reset watching state
+            isWatchingDown = false;
+            isWatchingLeft = false;
+            isWatchingRight = false;
+            isWatchingUp = false;
+
+            std::cout << "Press any key to continue..." << std::endl;
+            std::cin.get(); // Pause
         }
         else {
             // Autres touches
