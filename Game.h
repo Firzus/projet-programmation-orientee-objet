@@ -5,6 +5,9 @@
 
 #include "Dungeon.h"
 #include "Hero.h"
+#include "Spectre.h"
+#include "Faucheur.h"
+#include "Golem.h"
 
 class Game
 {
@@ -16,6 +19,9 @@ class Game
 
 	Dungeon dungeon;
 	Hero hero;
+	std::vector<Spectre> spectres;
+	std::vector<Faucheur> faucheurs;
+	std::vector<Golem> golems;
 
 public:
 	Game();
@@ -23,4 +29,5 @@ public:
 	void init();
 	void playTurn();
 	void endGame();
+	Entity* getEntityAtPosition(int x, int y);
 };
