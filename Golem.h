@@ -1,13 +1,9 @@
 #pragma once
 
 #include "Entity.h"
-#include "Monster.h"
 
-class Golem : public Entity, public Monster
+class Golem : public Entity
 {
-	void skill();
-	void reward();
-
 public:
 	Golem();
 	~Golem();

@@ -3,45 +3,15 @@
 Game::Game()
 {
 	init();
+    playTurn();
 }
 
 Game::~Game(){}
 
 void Game::init()
 {
-    for (int y = 0; y < dungeon.getCurrentRoom().size(); ++y) {
-        for (int x = 0; x < dungeon.getCurrentRoom()[y].size(); ++x) {
-            char symbol = dungeon.getCurrentRoom()[y][x];
-            switch (symbol) {
-            case '@':
-                hero.move(x, y);
-                break;
-            case 'S': {
-                Spectre spectre;
-                spectre.move(x, y);
-                spectres.push_back(spectre);
-                break;
-            }
-            case 'G': {
-                Golem golem;
-                golem.move(x, y);
-                golems.push_back(golem);
-                break;
-            }
-            case 'F': {
-                Faucheur faucheur;
-                faucheur.move(x, y);
-                faucheurs.push_back(faucheur);
-                break;
-            }
-            default:
-                break;
-            }
-        }
-    }
-
-	// then -> play the game
-	playTurn();
+	// - Initialize the dungeon
+    getEntities();
 }
 
 void Game::playTurn()
@@ -114,7 +84,7 @@ void Game::playTurn()
 
             switch (symbol) {
             case '.':
-				std::cout << "En attente de confirmation de déplacement (enter)" << std::endl;
+				std::cout << "En attente de confirmation de deplacement (enter)" << std::endl;
 
                 if (_getch() == 13)
                 {
@@ -145,18 +115,17 @@ void Game::playTurn()
                     ennemy->takeDamage(hero.getPower());
                     std::cout << "Vous avez inflige " << hero.getPower() << " a l'ennemi !" << std::endl;
 
-					if (ennemy->isDead()) {
-						// 1. Remove the ennemy from the list
-						removeEntityAtPosition(newPosX, newPosY);
-
-						// 2. Remove the sylbol from the map
-						dungeon.updateMapAfterEntityDeath(newPosX, newPosY);
-
-						 std::cout << "L'ennemi est mort !" << std::endl;
+					// Remove the ennemy if dead
+                    if (ennemy->isDead()) {
+                        removeEnnemy(ennemy, newPosX, newPosY);
+                        std::cout << "L'ennemi est mort !" << std::endl;
 					}
-                    else {
-					    std::cout << "L'ennemi a maintenant " << ennemy->getLife() << " points de vie." << std::endl;
-                    }
+					else {
+						std::cout << "L'ennemi a maintenant " << ennemy->getLife() << " points de vie." << std::endl;
+					}
+
+                    // Sleep
+                    std::this_thread::sleep_for(std::chrono::seconds(5));
                 }
                 else return;
 
@@ -192,6 +161,41 @@ void Game::endGame()
 	std::cout << "End Game" << std::endl;
 
     init();
+    playTurn();
+}
+
+void Game::getEntities()
+{
+    for (int y = 0; y < dungeon.getCurrentRoom().size(); ++y) {
+        for (int x = 0; x < dungeon.getCurrentRoom()[y].size(); ++x) {
+            char symbol = dungeon.getCurrentRoom()[y][x];
+            switch (symbol) {
+            case '@':
+                hero.move(x, y);
+                break;
+            case 'S': {
+                Spectre spectre;
+                spectre.move(x, y);
+                spectres.push_back(spectre);
+                break;
+            }
+            case 'G': {
+                Golem golem;
+                golem.move(x, y);
+                golems.push_back(golem);
+                break;
+            }
+            case 'F': {
+                Faucheur faucheur;
+                faucheur.move(x, y);
+                faucheurs.push_back(faucheur);
+                break;
+            }
+            default:
+                break;
+            }
+        }
+    }
 }
 
 Entity* Game::getEntityAtPosition(int x, int y)
@@ -261,6 +265,47 @@ void Game::removeEntityAtPosition(int x, int y)
         faucheurs.erase(it, faucheurs.end());
         break;
     }
+    default:
+        break;
+    }
+}
+
+void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
+{
+    // 1. Remove the ennemy from the list
+    removeEntityAtPosition(newPosX, newPosY);
+
+    // 2. Remove the sylbol from the map
+    dungeon.updateMapAfterEntityDeath(newPosX, newPosY);
+
+    // Special Enemy Skill
+    char enemySymbol = ennemy->getSymbol();
+    switch (enemySymbol)
+    {
+    case 'S':
+        // Restaure les PV du héros
+        hero.setLife(hero.getMaxLife());
+		std::cout << "Le héros vient de restaurer ses points de vie" << std::endl;
+        break;
+    case 'G':
+        // + 20 Puissance au héros
+        hero.buffPower(20);
+        std::cout << "Le héros a maintenant " << hero.getPower() << " points de puissance." << std::endl;
+        break;
+    case 'F':
+        // -50 Points de vie à tout les monstres
+        for (int y = 0; y < dungeon.getCurrentRoom().size(); ++y) {
+            for (int x = 0; x < dungeon.getCurrentRoom()[y].size(); ++x) {
+                char symbol = dungeon.getCurrentRoom()[y][x];
+                if (symbol == 'S' || symbol == 'G' || symbol == 'F')
+                {
+                    Entity* ennemy = getEntityAtPosition(x, y);
+                    ennemy->takeDamage(50);
+                }
+            }
+        }
+
+        break;
     default:
         break;
     }

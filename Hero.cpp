@@ -2,10 +2,9 @@
 
 Hero::Hero()
 {
-	posX = 0;
-	posY = 0;
 	symbol = '@';
 	life = 300;
+	maxLife = 300;
 	power = 50;
 	movement = 3;
 }

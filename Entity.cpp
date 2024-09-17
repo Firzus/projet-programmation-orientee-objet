@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity() : posX(0), posY(0), symbol('E'), life(100), power(50), movement(3) {}
+Entity::Entity() {}
 
 Entity::~Entity() {}
 
@@ -28,12 +28,7 @@ void Entity::takeDamage(int damage)
 	life < 0 ? life = 0 : life;
 }
 
-int Entity::getPosX() const
+void Entity::buffPower(int powerBuff)
 {
-	return posX;
-}
-
-int Entity::getPosY() const
-{
-	return posY;
+	power += powerBuff;
 }

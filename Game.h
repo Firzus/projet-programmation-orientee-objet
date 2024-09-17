@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <conio.h> 
+#include <thread>
+#include <chrono>
 
 #include "Dungeon.h"
 #include "Hero.h"
@@ -29,6 +31,8 @@ public:
 	void init();
 	void playTurn();
 	void endGame();
+	void getEntities();
 	Entity* getEntityAtPosition(int x, int y);
 	void removeEntityAtPosition(int x, int y);
+	void removeEnnemy(Entity* ennemy, int newPosX, int newPosY);
 };

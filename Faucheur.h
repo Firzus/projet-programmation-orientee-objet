@@ -1,12 +1,9 @@
 #pragma once
 
 #include "Entity.h"
-#include "Monster.h"
 
-class Faucheur : public Entity, public Monster
+class Faucheur : public Entity
 {
-	void skill();
-	void reward();
 public:
 	Faucheur();
 	~Faucheur();
