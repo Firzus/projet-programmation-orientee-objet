@@ -11,7 +11,6 @@ Dungeon::~Dungeon(){}
 
 void Dungeon::loadRoom()
 {
-    // TODO: Change maps values
     std::vector<std::string> roomOne = readRoom("room-one.txt");
     std::vector<std::string> roomTwo = readRoom("room-two.txt");
     std::vector<std::string> roomThree = readRoom("room-three.txt");
@@ -42,4 +41,9 @@ std::vector<std::string> Dungeon::readRoom(std::string fileName)
 std::vector<std::string> Dungeon::getCurrentRoom()
 {
     return map[index];
+}
+
+void Dungeon::nextRoom()
+{
+	index++;
 }

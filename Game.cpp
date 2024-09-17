@@ -22,8 +22,6 @@ void Game::playTurn()
     isPlaying = true;
 
     while (isPlaying) { // && hero.isAlive()
-        // Draw the map
-
         // - Clear the console
         system("cls");
 
@@ -43,25 +41,29 @@ void Game::playTurn()
             action = _getch(); // Lire la touche suivante
             switch (action) {
             case 72: // Move up
-                std::cout << "Move up" << std::endl;
+                std::cout << "Choose up direction" << std::endl;
+                // Set pos x, y
 
                 std::cout << "Press any key to continue..." << std::endl;
                 std::cin.get(); // Pause
                 break;
             case 80: // Move down
-                std::cout << "Move down" << std::endl;
+                std::cout << "Choose down direction" << std::endl;
+                // Set pos x, y
 
                 std::cout << "Press any key to continue..." << std::endl;
                 std::cin.get(); // Pause
                 break;
             case 75: // Move left
-                std::cout << "Move left" << std::endl;
+                std::cout << "Choose left direction" << std::endl;
+                // Set pos x, y
 
                 std::cout << "Press any key to continue..." << std::endl;
                 std::cin.get(); // Pause
                 break;
             case 77: // Move right
-                std::cout << "Move right" << std::endl;
+                std::cout << "Choose right direction" << std::endl;
+                // Set pos x, y
 
                 std::cout << "Press any key to continue..." << std::endl;
                 std::cin.get(); // Pause
