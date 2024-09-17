@@ -13,12 +13,11 @@ protected:
 	int power;
 	int movement;
 
-
 public:
 	Entity();
 	~Entity();
 
-	bool isAlive();
+	bool isAlive() const;
 	void move(int x, int y);
 	void takeDamage(int damage);
 	int returnPower();

@@ -9,10 +9,44 @@ Game::~Game(){}
 
 void Game::init()
 {
-    // Init Hero
-	hero.setPos(dungeon.getCurrentRoom());
-	
-    // Init Monsters
+    for (int y = 0; y < dungeon.getCurrentRoom().size(); ++y) {
+        for (int x = 0; x < dungeon.getCurrentRoom()[y].size(); ++x) {
+            char symbol = dungeon.getCurrentRoom()[y][x];
+            switch (symbol) {
+            case '@':
+                hero.move(x, y);
+                break;
+            case 'S': {
+                Spectre spectre;
+                spectre.move(x, y);
+                spectres.push_back(spectre);
+                break;
+            }
+            case 'G': {
+                Golem golem;
+                golem.move(x, y);
+                golems.push_back(golem);
+                break;
+            }
+            case 'F': {
+                Faucheur faucheur;
+                faucheur.move(x, y);
+                faucheurs.push_back(faucheur);
+                break;
+            }
+            default:
+                break;
+            }
+        }
+    }
+
+    Entity* spectrus = getEntityAtPosition(3, 1);
+    if (spectrus != nullptr) {
+        std::cout << "Monstre trouve a la position (3, 1)" << std::endl;
+    }
+    else {
+        std::cout << "Aucun monstre trouve à la position (3, 1)" << std::endl;
+    }
 
 	// then -> play the game
 	playTurn();
@@ -24,7 +58,7 @@ void Game::playTurn()
 
     while (isPlaying && hero.isAlive()) {
         // - Clear the console
-        system("cls");
+        //system("cls");
 
         // - Display map current state
         for (std::string line : dungeon.getCurrentRoom()) {
@@ -164,4 +198,46 @@ void Game::endGame()
 	std::cout << "End Game" << std::endl;
 
     init();
+}
+
+Entity* Game::getEntityAtPosition(int x, int y)
+{
+    std::vector<std::string> currentRoom = dungeon.getCurrentRoom();
+
+    for (int row = 0; row < currentRoom.size(); ++row) {
+        for (int col = 0; col < currentRoom[row].size(); ++col) {
+            if (row == y && col == x) {
+                char symbol = currentRoom[row][col];
+                switch (symbol) {
+                case 'S': {
+                    for (Spectre& spectre : spectres) {
+                        if (spectre.getPosX() == x && spectre.getPosY() == y) {
+                            return &spectre;
+                        }
+                    }
+                    break;
+                }
+                case 'G': {
+                    for (Golem& golem : golems) {
+                        if (golem.getPosX() == x && golem.getPosY() == y) {
+                            return &golem;
+                        }
+                    }
+                    break;
+                }
+                case 'F': {
+                    for (Faucheur& faucheur : faucheurs) {
+                        if (faucheur.getPosX() == x && faucheur.getPosY() == y) {
+                            return &faucheur;
+                        }
+                    }
+                    break;
+                }
+                default:
+                    break;
+                }
+            }
+        }
+    }
+    return nullptr;
 }
