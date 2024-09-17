@@ -151,11 +151,11 @@ void Game::playTurn()
 
                 if (_getch() == 13)
                 {
-                    // Get the ennemy
-                    Entity ennemy;
+                    // Get the ennemy the hero point at
+                    Entity* ennemy = getEntityAtPosition(newPosX, newPosY);
 
                     // Attack the ennemy
-                    ennemy.takeDamage(hero.returnPower());
+                    ennemy->takeDamage(hero.returnPower());
 
                     // Chat message
                     std::cout << "Vous avez inflige " << hero.returnPower() << " a l'ennemi !" << std::endl;
