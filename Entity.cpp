@@ -4,9 +4,9 @@ Entity::Entity() : posX(0), posY(0), symbol('E'), life(100), power(50), movement
 
 Entity::~Entity() {}
 
-bool Entity::isAlive() const 
+bool Entity::isDead() const 
 {
-	if (life > 0)
+	if (life <= 0)
 	{
 		return true;
 	}

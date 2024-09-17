@@ -30,4 +30,5 @@ public:
 	void playTurn();
 	void endGame();
 	Entity* getEntityAtPosition(int x, int y);
+	void removeEntityAtPosition(int x, int y);
 };

@@ -17,11 +17,11 @@ public:
 	Entity();
 	~Entity();
 
-	bool isAlive() const;
+	bool isDead() const;
 	void move(int x, int y);
 	void takeDamage(int damage);
-	int getPower() { return power; }
-	int getLife() { return life; }
+	int getPower() const { return power; }
+	int getLife() const { return life; }
 	int getPosX() const;
 	int getPosY() const;
 };

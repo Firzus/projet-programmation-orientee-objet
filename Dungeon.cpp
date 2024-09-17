@@ -49,6 +49,11 @@ void Dungeon::updatePlayerPosition(int oldHeroPosX, int oldHeroPosY, int newHero
     map[index][newHeroPosY][newHeroPosX] = '@';
 }
 
+void Dungeon::updateMapAfterEntityDeath(int x, int y)
+{
+	map[index][y][x] = '.';
+}
+
 void Dungeon::nextRoom()
 {
 	index++;

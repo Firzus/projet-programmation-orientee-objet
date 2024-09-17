@@ -40,14 +40,6 @@ void Game::init()
         }
     }
 
-    Entity* spectrus = getEntityAtPosition(3, 1);
-    if (spectrus != nullptr) {
-        std::cout << "Monstre trouve a la position (3, 1)" << std::endl;
-    }
-    else {
-        std::cout << "Aucun monstre trouve à la position (3, 1)" << std::endl;
-    }
-
 	// then -> play the game
 	playTurn();
 }
@@ -56,7 +48,7 @@ void Game::playTurn()
 {
     isPlaying = true;
 
-    while (isPlaying && hero.isAlive()) {
+    while (isPlaying && !hero.isDead()) {
         // - Clear the console
         system("cls");
 
@@ -73,25 +65,21 @@ void Game::playTurn()
 
         // Gestion des actions du joueur
         if (action == -32) {
-            action = _getch(); // Lire la touche suivante
+            action = _getch();
             switch (action) {
-            case 72: // Move up
-                std::cout << "Choose up direction" << std::endl;
+            case 72: // Watch up side
 				isWatchingUp = true;
 
                 break;
-            case 80: // Move down
-                std::cout << "Choose down direction" << std::endl;
+            case 80: // Watch down
 				isWatchingDown = true;
 
                 break;
-            case 75: // Move left
-                std::cout << "Choose left direction" << std::endl;
+            case 75: // Watch left side
 				isWatchingLeft = true;
 
                 break;
-            case 77: // Move right
-                std::cout << "Choose right direction" << std::endl;
+            case 77: // Watch right side
 				isWatchingRight = true;
 
                 break;
@@ -124,8 +112,7 @@ void Game::playTurn()
 
             char symbol = dungeon.checkPosition(newPosX, newPosY);
 
-            switch (symbol)
-            {
+            switch (symbol) {
             case '.':
 				std::cout << "En attente de confirmation de déplacement (enter)" << std::endl;
 
@@ -156,10 +143,20 @@ void Game::playTurn()
 
                     // Attack the ennemy
                     ennemy->takeDamage(hero.getPower());
-
-                    // Chat message
                     std::cout << "Vous avez inflige " << hero.getPower() << " a l'ennemi !" << std::endl;
-					std::cout << "L'ennemi a maintenant " << ennemy->getLife() << " points de vie." << std::endl;
+
+					if (ennemy->isDead()) {
+						// 1. Remove the ennemy from the list
+						removeEntityAtPosition(newPosX, newPosY);
+
+						// 2. Remove the sylbol from the map
+						dungeon.updateMapAfterEntityDeath(newPosX, newPosY);
+
+						 std::cout << "L'ennemi est mort !" << std::endl;
+					}
+                    else {
+					    std::cout << "L'ennemi a maintenant " << ennemy->getLife() << " points de vie." << std::endl;
+                    }
                 }
                 else return;
 
@@ -237,4 +234,34 @@ Entity* Game::getEntityAtPosition(int x, int y)
         }
     }
     return nullptr;
+}
+
+void Game::removeEntityAtPosition(int x, int y)
+{
+    char symbol = dungeon.getCurrentRoom()[y][x];
+    switch (symbol) {
+    case 'S': {
+        auto it = std::remove_if(spectres.begin(), spectres.end(), [x, y](Spectre& spectre) {
+            return spectre.getPosX() == x && spectre.getPosY() == y;
+            });
+        spectres.erase(it, spectres.end());
+        break;
+    }
+    case 'G': {
+        auto it = std::remove_if(golems.begin(), golems.end(), [x, y](Golem& golem) {
+            return golem.getPosX() == x && golem.getPosY() == y;
+            });
+        golems.erase(it, golems.end());
+        break;
+    }
+    case 'F': {
+        auto it = std::remove_if(faucheurs.begin(), faucheurs.end(), [x, y](Faucheur& faucheur) {
+            return faucheur.getPosX() == x && faucheur.getPosY() == y;
+            });
+        faucheurs.erase(it, faucheurs.end());
+        break;
+    }
+    default:
+        break;
+    }
 }
