@@ -48,32 +48,22 @@ void Game::playTurn()
                 break;
             case 80: // Move down
                 std::cout << "Choose down direction" << std::endl;
-                // Set pos x, y
+				isWatchingDown = true;
 
-                std::cout << "Press any key to continue..." << std::endl;
-                std::cin.get(); // Pause
                 break;
             case 75: // Move left
                 std::cout << "Choose left direction" << std::endl;
-                // Set pos x, y
+				isWatchingLeft = true;
 
-                std::cout << "Press any key to continue..." << std::endl;
-                std::cin.get(); // Pause
                 break;
             case 77: // Move right
                 std::cout << "Choose right direction" << std::endl;
-                // Set pos x, y
+				isWatchingRight = true;
 
-
-                std::cout << "Press any key to continue..." << std::endl;
-                std::cin.get(); // Pause
                 break;
             }
 
-            // Pos player
-			std::cout << "Position du joueur : " << hero.getPosX() << " " << hero.getPosY() << std::endl;
-
-			// Moove Player
+			// Watch Player
             int newPosX = 0;
 			int newPosY = 0;
 
@@ -89,12 +79,12 @@ void Game::playTurn()
 			}
 			else if (isWatchingLeft)
 			{
-				newPosX = hero.getPosX() + 1;
+				newPosX = hero.getPosX() - 1;
 				newPosY = hero.getPosY();
 			}
 			else if (isWatchingRight)
 			{
-                newPosX = hero.getPosX() - 1;
+                newPosX = hero.getPosX() + 1;
                 newPosY = hero.getPosY();
 			}
 
@@ -103,10 +93,20 @@ void Game::playTurn()
             switch (symbol)
             {
             case '.':
-                std::cout << "Symbole : vide" << std::endl;
+				std::cout << "En attente de confirmation" << std::endl;
+
+                if (_getch() == 13)
+                {
+                    hero.move(newPosX, newPosY);
+
+					std::cout << "New Post : " << hero.getPosX() << " " << hero.getPosY() << std::endl;
+                }
+                else return;
+				
                 break;
             case '#':
-				std::cout << "Symbole : mur" << std::endl;
+				std::cout << "Case indisponible vous foncez dans le mur !" << std::endl;
+
 				break;
             case 'S':
 				std::cout << "Symbole : Spectre" << std::endl;

@@ -34,8 +34,8 @@ void Entity::setPos(std::vector<std::string> currentRoom)
 
 void Entity::move(int x, int y)
 {
-	posX += x;
-	posY += y;
+	posX = x;
+	posY = y;
 }
 
 // Logic to attack target
