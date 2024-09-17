@@ -22,23 +22,6 @@ void Entity::move(int x, int y)
 	posY = y;
 }
 
-// Logic to attack target
-void Entity::takeDamage(int damage)
-{
-	// Do damages
-	if (life >= damage)
-	{
-		life -= damage;
-	}
-	else
-	{
-		life == 0;
-	}
-
-	// Check if entity is still alive
-	isAlive();
-}
-
 int Entity::returnPower()
 {
 	return power;
