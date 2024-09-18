@@ -13,21 +13,19 @@ void Game::init()
 	// - Initialize the dungeon
     getEntities();
 
-    dungeon.updateGame();
+    updateGame();
 }
 
 void Game::playTurn()
 {
     while (!hero.isDead()) {
-        // R�initialiser les PM du h�ros au d�but du tour
+        // Reinitialiser les PM du heros au d�but du tour
         hero.resetMovement();
 
 		// Tour du joueur
-        dungeon.updateTextInfos("Tour du joueur");
         playerTurn();
 
 		// Tour des ennemis
-		dungeon.updateTextInfos("Tour des ennemis");
         enemyTurn();
     }
 
@@ -37,7 +35,8 @@ void Game::playTurn()
 void Game::endGame()
 {    
 	// Affiche un message de fin de jeu temporaire
-    dungeon.updateTextInfos("Game Over !");
+    infos.addInfo("Game Over !");
+    updateGame();
 
     init();
     playTurn();
@@ -75,6 +74,18 @@ void Game::getEntities()
             }
         }
     }
+}
+
+void Game::updateGame()
+{
+	// Clear console
+    system("cls");
+
+	// Affichage de la room
+    dungeon.updateRoom();
+
+	// Affichage des infos
+    infos.updateInfos();
 }
 
 Entity* Game::getEntityAtPosition(int x, int y)
@@ -210,12 +221,14 @@ void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
     case 'S':
         // Restaure les PV du h�ros
         hero.setLife(hero.getMaxLife());
-		dungeon.updateTextInfos("Le heros vient de restaurer ses points de vie");
+        infos.addInfo("Le heros vient de restaurer ses points de vie");
+        updateGame();
         break;
     case 'G':
         // + 20 Puissance au h�ros
         hero.buffPower(20);
-        dungeon.updateTextInfos("Le heros vient de gagner 20 points de puissance");
+        infos.addInfo("Le heros vient de gagner 20 points de puissance");
+        updateGame();
         break;
     case 'F':
         // -50 Points de vie � tout les monstres
@@ -230,7 +243,8 @@ void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
             }
         }
 
-        dungeon.updateTextInfos("Tous les ennemis viennent de perdre 50 points de vie");
+        infos.addInfo("Tous les ennemis viennent de perdre 50 points de vie");
+        updateGame();
 
         break;
     default:
@@ -257,11 +271,15 @@ bool Game::areEnemiesRemaining() {
 
 void Game::playerTurn()
 {
+    infos.addInfo("Tour du joueur");
+    updateGame();
+
     while (hero.getMovement() > 0) {
         // Demande une action au joueur
         char action;
 
-        dungeon.updateTextInfos("Choose action: [Arrow keys] -> choose direction");
+        infos.addInfo("Choose action: [Arrow keys] -> choose direction");
+        updateGame();
         
         action = _getch();
 
@@ -318,7 +336,8 @@ void Game::playerTurn()
 
             switch (symbol) {
             case '.':
-				dungeon.updateTextInfos("[Enter] -> move");
+                infos.addInfo("[Enter] -> move");
+                updateGame();
 
                 if (_getch() == 13)
                 {
@@ -329,13 +348,15 @@ void Game::playerTurn()
 
                 break;
             case '#':
-                dungeon.updateTextInfos("Mur droit devant");
-              
+                infos.addInfo("Mur droit devant");
+                updateGame();
+
                 break;
             case 'S':
             case 'G':
             case 'F':
-                dungeon.updateTextInfos("[Enter] -> attack");
+                infos.addInfo("[Enter] -> attack");
+                updateGame();
 
                 if (_getch() == 13)
                 {
@@ -345,16 +366,19 @@ void Game::playerTurn()
                     // Attack the ennemy
                     ennemy->takeDamage(hero.getPower());
 
-                    dungeon.updateTextInfos("Vous avez inflige " + std::to_string(hero.getPower()) + " a l'ennemi !");
+                    infos.addInfo("Vous avez inflige " + std::to_string(hero.getPower()) + " a l'ennemi !");
+                    updateGame();
 
                     // Remove the ennemy if dead
                     if (ennemy->isDead()) {
                         removeEnnemy(ennemy, newPosX, newPosY);
 
-						dungeon.updateTextInfos("L'ennemi est mort !");
+                        infos.addInfo("L'ennemi est mort !");
+                        updateGame();
                     }
                     else {
-						dungeon.updateTextInfos("L'ennemi a maintenant " + std::to_string(ennemy->getLife()) + " points de vie.");
+                        infos.addInfo("L'ennemi a maintenant " + std::to_string(ennemy->getLife()) + " points de vie.");
+                        updateGame();
                     }
 
                     // Sleep
@@ -364,7 +388,8 @@ void Game::playerTurn()
 
                 break;
             default:
-				dungeon.updateTextInfos("Erreur symbole non detecte");
+                infos.addInfo("Erreur symbole non detecte");
+                updateGame();
                 break;
             }
 
@@ -376,15 +401,19 @@ void Game::playerTurn()
         }
         else {
             // - Invalid action
-			dungeon.updateTextInfos("Invalid action! Please try again.");
+            infos.addInfo("Invalid action! Please try again.");
+            updateGame();
         }
 
-        dungeon.updateGame();
+        updateGame();
     }
 }
 
 void Game::enemyTurn()
 {
+    infos.addInfo("Tour des ennemis");
+    updateGame();
+
 	// Parcourir tous les spectres
     for (Spectre& spectre : spectres) {
         if (!spectre.isDead()) {
@@ -423,5 +452,5 @@ void Game::enemyTurn()
         }
     }
 
-    dungeon.updateGame();
+    updateGame();
 }

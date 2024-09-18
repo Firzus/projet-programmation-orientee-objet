@@ -75,8 +75,6 @@ void Dungeon::changeSymbolColor(int posX, int posY)
 void Dungeon::nextRoom()
 {
 	if (index >= map.size()) {
-		updateTextInfos("Vous avez termine le donjon !");
-
 		index = 0;
 		return;
 	}
@@ -84,30 +82,10 @@ void Dungeon::nextRoom()
 	index++;
 }
 
-void Dungeon::updateTextInfos(std::string info)
+void Dungeon::updateRoom()
 {
-    infosList.push_back(info);
-
-	if (infosList.size() > 5) {
-		infosList.erase(infosList.begin());
-	}
-
-	updateGame();
-}
-
-void Dungeon::updateGame()
-{
-	// Clear console
-	system("cls");
-
-	// Affichage de la room
     for (int i = 0; i < getCurrentRoom().size(); i++) {
         std::cout << getCurrentRoom()[i] << std::endl;
-    }
-
-	// Affichage des infos
-    for (int i = 0; i < infosList.size(); i++) {
-        std::cout << infosList[i] << std::endl;
     }
 }
 
