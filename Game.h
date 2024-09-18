@@ -37,5 +37,6 @@ public:
 	void removeEntityAtPosition(int x, int y);
 	void removeEnnemy(Entity* ennemy, int newPosX, int newPosY);
 	bool areEnemiesRemaining();
+	void playerTurn();
 	void enemyTurn();
 };

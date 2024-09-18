@@ -18,143 +18,26 @@ void Game::init()
 
 void Game::playTurn()
 {
-    isPlaying = true;
-
-    while (isPlaying && !hero.isDead()) {
+    while (!hero.isDead()) {
         // R�initialiser les PM du h�ros au d�but du tour
         hero.resetMovement();
 
-        while (hero.getMovement() > 0) {
-            // Demande une action au joueur
-            char action;
-
-        std::cout << "Choose action: [Arrow keys] -> choose direction, [Enter] -> move / attack: ";
-        action = _getch();
-
-            // Gestion des actions du joueur
-            if (action == -32) {
-                action = _getch();
-                switch (action) {
-                case 72: // Watch up side
-                    isWatchingUp = true;
-
-                    break;
-                case 80: // Watch down
-                    isWatchingDown = true;
-
-                    break;
-                case 75: // Watch left side
-                    isWatchingLeft = true;
-
-                    break;
-                case 77: // Watch right side
-                    isWatchingRight = true;
-
-                    break;
-                }
-
-                // Watch Player
-                int newPosX = 0;
-                int newPosY = 0;
-
-                if (isWatchingUp)
-                {
-                    newPosY = hero.getPosY() - 1;
-                    newPosX = hero.getPosX();
-                }
-                else if (isWatchingDown)
-                {
-                    newPosY = hero.getPosY() + 1;
-                    newPosX = hero.getPosX();
-                }
-                else if (isWatchingLeft)
-                {
-                    newPosX = hero.getPosX() - 1;
-                    newPosY = hero.getPosY();
-                }
-                else if (isWatchingRight)
-                {
-                    newPosX = hero.getPosX() + 1;
-                    newPosY = hero.getPosY();
-                }
-
-                char symbol = dungeon.checkPosition(newPosX, newPosY);
-
-            dungeon.changeSymbolColor(newPosX, newPosY);
-
-            switch (symbol) {
-            case '.':
-				std::cout << "En attente de confirmation de deplacement (enter)" << std::endl;
-
-                    if (_getch() == 13)
-                    {
-						updateEntityPosition(&hero, hero.getPosX(), hero.getPosY(), newPosX, newPosY);
-                        hero.reduceMovement(1);
-                    }
-                    else return;
-
-                    break;
-                case '#':
-                    std::cout << "Case indisponible vous foncez dans le mur !" << std::endl;
-
-                    break;
-                case 'S':
-                case 'G':
-                case 'F':
-                    std::cout << "Vous confirmez attaquer la cible ? (enter)" << std::endl;
-                    if (_getch() == 13)
-                    {
-                        // Get the ennemy the hero point at
-                        Entity* ennemy = getEntityAtPosition(newPosX, newPosY);
-
-                        // Attack the ennemy
-                        ennemy->takeDamage(hero.getPower());
-                        std::cout << "Vous avez inflige " << hero.getPower() << " a l'ennemi !" << std::endl;
-
-                        // Remove the ennemy if dead
-                        if (ennemy->isDead()) {
-                            removeEnnemy(ennemy, newPosX, newPosY);
-                            std::cout << "L'ennemi est mort !" << std::endl;
-                        }
-                        else {
-                            std::cout << "L'ennemi a maintenant " << ennemy->getLife() << " points de vie." << std::endl;
-                        }
-
-                        // Sleep
-                        std::this_thread::sleep_for(std::chrono::seconds(2));
-                    }
-                    else return;
-
-                    break;
-                default:
-                    std::cout << "Erreur symbole non detecte" << std::endl;
-                    break;
-                }
-
-                // Reset watching state
-                isWatchingDown = false;
-                isWatchingLeft = false;
-                isWatchingRight = false;
-                isWatchingUp = false;
-            }
-            else {
-                // - Invalid action
-                std::cout << "Invalid action! Please try again." << std::endl;
-            }
-
-            dungeon.updateGame();
-        }
+		// Tour du joueur
+        dungeon.updateTextInfos("Tour du joueur");
+        playerTurn();
 
 		// Tour des ennemis
-
+		dungeon.updateTextInfos("Tour des ennemis");
         enemyTurn();
     }
+
+	endGame();
 }
 
 void Game::endGame()
 {    
 	// Affiche un message de fin de jeu temporaire
-	std::cout << "End Game" << std::endl;
+    dungeon.updateTextInfos("Game Over !");
 
     init();
     playTurn();
@@ -372,6 +255,134 @@ bool Game::areEnemiesRemaining() {
     return false;
 }
 
+void Game::playerTurn()
+{
+    while (hero.getMovement() > 0) {
+        // Demande une action au joueur
+        char action;
+
+        dungeon.updateTextInfos("Choose action: [Arrow keys] -> choose direction, [Enter] -> move / attack:");
+        
+        action = _getch();
+
+        // Gestion des actions du joueur
+        if (action == -32) {
+            action = _getch();
+            switch (action) {
+            case 72: // Watch up side
+                isWatchingUp = true;
+
+                break;
+            case 80: // Watch down
+                isWatchingDown = true;
+
+                break;
+            case 75: // Watch left side
+                isWatchingLeft = true;
+
+                break;
+            case 77: // Watch right side
+                isWatchingRight = true;
+
+                break;
+            }
+
+            // Watch Player
+            int newPosX = 0;
+            int newPosY = 0;
+
+            if (isWatchingUp)
+            {
+                newPosY = hero.getPosY() - 1;
+                newPosX = hero.getPosX();
+            }
+            else if (isWatchingDown)
+            {
+                newPosY = hero.getPosY() + 1;
+                newPosX = hero.getPosX();
+            }
+            else if (isWatchingLeft)
+            {
+                newPosX = hero.getPosX() - 1;
+                newPosY = hero.getPosY();
+            }
+            else if (isWatchingRight)
+            {
+                newPosX = hero.getPosX() + 1;
+                newPosY = hero.getPosY();
+            }
+
+            char symbol = dungeon.checkPosition(newPosX, newPosY);
+
+            dungeon.changeSymbolColor(newPosX, newPosY);
+
+            switch (symbol) {
+            case '.':
+				dungeon.updateTextInfos("En attente de confirmation de deplacement (enter)");
+
+                if (_getch() == 13)
+                {
+                    updateEntityPosition(&hero, hero.getPosX(), hero.getPosY(), newPosX, newPosY);
+                    hero.reduceMovement(1);
+                }
+                else return;
+
+                break;
+            case '#':
+                dungeon.updateTextInfos("En attente de confirmation de deplacement (enter)");
+              
+                break;
+            case 'S':
+            case 'G':
+            case 'F':
+                dungeon.updateTextInfos("Vous confirmez attaquer la cible ? (enter)");
+
+                if (_getch() == 13)
+                {
+                    // Get the ennemy the hero point at
+                    Entity* ennemy = getEntityAtPosition(newPosX, newPosY);
+
+                    // Attack the ennemy
+                    ennemy->takeDamage(hero.getPower());
+
+                    dungeon.updateTextInfos("Vous avez inflige " + std::to_string(hero.getPower()) + " a l'ennemi !");
+
+                    // Remove the ennemy if dead
+                    if (ennemy->isDead()) {
+                        removeEnnemy(ennemy, newPosX, newPosY);
+
+						dungeon.updateTextInfos("L'ennemi est mort !");
+                    }
+                    else {
+						dungeon.updateTextInfos("L'ennemi a maintenant " + std::to_string(ennemy->getLife()) + " points de vie.");
+                    }
+
+                    // Sleep
+                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                }
+                else return;
+
+                break;
+            default:
+				dungeon.updateTextInfos("Erreur symbole non detecte");
+                break;
+            }
+
+            // Reset watching state
+            isWatchingDown = false;
+            isWatchingLeft = false;
+            isWatchingRight = false;
+            isWatchingUp = false;
+        }
+        else {
+            // - Invalid action
+			dungeon.updateTextInfos("Invalid action! Please try again.");
+        }
+
+        dungeon.updateGame();
+    }
+}
+
 void Game::enemyTurn()
 {
 	// Parcourir tous les spectres
@@ -381,10 +392,10 @@ void Game::enemyTurn()
             int newY = spectre.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
             if (dungeon.checkPosition(newX, newY) == '.') {
                 updateEntityPosition(&spectre, spectre.getPosX(), spectre.getPosY(), newX, newY);
-
-                std::this_thread::sleep_for(std::chrono::seconds(1));
             }
         }
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
     // Parcourir tous les golems
@@ -396,9 +407,10 @@ void Game::enemyTurn()
             if (dungeon.checkPosition(newX, newY) == '.') {
                 updateEntityPosition(&golem, golem.getPosX(), golem.getPosY(), newX, newY);
 
-                std::this_thread::sleep_for(std::chrono::seconds(1));
             }
         }
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
     // Parcourir tous les faucheurs
@@ -410,9 +422,10 @@ void Game::enemyTurn()
             if (dungeon.checkPosition(newX, newY) == '.') {
                 updateEntityPosition(&faucheur, faucheur.getPosX(), faucheur.getPosY(), newX, newY);
           
-                std::this_thread::sleep_for(std::chrono::seconds(1));
             }
         }
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
     dungeon.updateGame();
