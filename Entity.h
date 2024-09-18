@@ -38,7 +38,7 @@ public:
 	int getPosY() const { return posY; }
 
 	int getMovement() const { return movement; }
-	void reduceMovement() { movement--; }
+	void reduceMovement(int amount) { movement -= amount; }
 	void resetMovement() { movement = maxMovement; }
 
 	int getMaxMovement() const { return maxMovement; }

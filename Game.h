@@ -33,8 +33,10 @@ public:
 	void endGame();
 	void getEntities();
 	Entity* getEntityAtPosition(int x, int y);
+	void updateEntityPosition(Entity* entity, int posX, int posY, int newPosX, int newPosY);
 	void removeEntityAtPosition(int x, int y);
 	void removeEnnemy(Entity* ennemy, int newPosX, int newPosY);
 	bool areEnemiesRemaining();
+	void playerTurn();
 	void enemyTurn();
 };

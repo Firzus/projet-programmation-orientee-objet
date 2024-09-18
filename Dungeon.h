@@ -27,9 +27,8 @@ public:
 	int getIndex() const { return index; }
 	std::vector<std::vector<std::string>> getMap() { return map; }
 	std::vector<std::string> getCurrentRoom();
-	void updatePlayerPosition(int oldHeroPosX, int oldHeroPosY, int heroPosX, int heroPosY);
-	void updateMapAfterEntityDeath(int x, int y);
 	void changeSelectedSymbolColor(int posX, int posY);
 	char getWallSymbol() const { return wall; }
 	char getEmptySpaceSymbol() const { return emptySpace; }
+	void updateSymbolAtPosition(int x, int y, char symbol);
 };

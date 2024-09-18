@@ -43,15 +43,9 @@ std::vector<std::string> Dungeon::getCurrentRoom()
     return map[index];
 }
 
-void Dungeon::updatePlayerPosition(int oldHeroPosX, int oldHeroPosY, int newHeroPosX, int newHeroPosY)
+void Dungeon::updateSymbolAtPosition(int x, int y, char symbol)
 {
-    map[index][oldHeroPosY][oldHeroPosX] = getEmptySpaceSymbol();
-    map[index][newHeroPosY][newHeroPosX] = '@';
-}
-
-void Dungeon::updateMapAfterEntityDeath(int x, int y)
-{
-	map[index][y][x] = getEmptySpaceSymbol();
+	map[index][y][x] = symbol;
 }
 
 
@@ -157,7 +151,7 @@ char Dungeon::checkPosition(int posX, int posY)
 
     const std::vector<std::string>& currentRoom = map[index];
     if (posY < 0 || posY >= currentRoom.size() || posX < 0 || posX >= currentRoom[posY].size()) {
-        std::cerr << "Erreur : coordonnées invalides" << std::endl;
+        std::cerr << "Erreur : coordonnï¿½es invalides" << std::endl;
         return '\0';
     }
 
