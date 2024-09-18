@@ -54,16 +54,29 @@ void Dungeon::updateMapAfterEntityDeath(int x, int y)
 	map[index][y][x] = '.';
 }
 
+
 void Dungeon::changeSymbolColor(int posX, int posY)
 {
     char selectedSymbol = map[index][posY][posX];
-
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Save the actual position of the cursor
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    COORD originalPos = consoleInfo.dwCursorPosition;
+
+    // Move the cursor to the symbol position
+    SetConsoleCursorPosition(hConsole, { static_cast<SHORT>(posX), static_cast<SHORT>(posY) });
+
+    // Change the symbol color and re-write it
     SetConsoleTextAttribute(hConsole, 6);
+    std::cout << selectedSymbol;
 
-    map[index][posY][posX] = selectedSymbol;
-
+    // Reinitialize color
     SetConsoleTextAttribute(hConsole, 7);
+
+    // Put the cursor one line after its original position
+    SetConsoleCursorPosition(hConsole, { static_cast<SHORT>(0), static_cast<SHORT>(originalPos.Y + 1) });
 }
 
 void Dungeon::nextRoom()

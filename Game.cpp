@@ -285,12 +285,12 @@ void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
     case 'S':
         // Restaure les PV du héros
         hero.setLife(hero.getMaxLife());
-		std::cout << "Le héros vient de restaurer ses points de vie" << std::endl;
+		std::cout << "Le heros vient de restaurer ses points de vie" << std::endl;
         break;
     case 'G':
         // + 20 Puissance au héros
         hero.buffPower(20);
-        std::cout << "Le héros a maintenant " << hero.getPower() << " points de puissance." << std::endl;
+        std::cout << "Le heros a maintenant " << hero.getPower() << " points de puissance." << std::endl;
         break;
     case 'F':
         // -50 Points de vie à tout les monstres
@@ -311,7 +311,7 @@ void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
     }
 
     if (!areEnemiesRemaining()) {
-        std::cout << "Tous les ennemis ont été vaincus !" << std::endl;
+        std::cout << "Tous les ennemis ont ete vaincus !" << std::endl;
 
 		dungeon.nextRoom();
     }
