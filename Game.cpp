@@ -314,11 +314,10 @@ void Game::playerTurn()
 
             char symbol = dungeon.checkPosition(newPosX, newPosY);
 
-            dungeon.changeSelectedSymbolColor(newPosX, newPosY);
-
             switch (symbol) {
             case ' ':
 				dungeon.updateTextInfos("En attente de confirmation de deplacement (enter)");
+                dungeon.changeSelectedSymbolColor(newPosX, newPosY);
 
                 if (_getch() == 13)
                 {
@@ -330,12 +329,14 @@ void Game::playerTurn()
                 break;
             case '#':
                 dungeon.updateTextInfos("En attente de confirmation de deplacement (enter)");
+                dungeon.changeSelectedSymbolColor(newPosX, newPosY);
               
                 break;
             case 'S':
             case 'G':
             case 'F':
                 dungeon.updateTextInfos("Vous confirmez attaquer la cible ? (enter)");
+                dungeon.changeSelectedSymbolColor(newPosX, newPosY);
 
                 if (_getch() == 13)
                 {
@@ -365,6 +366,7 @@ void Game::playerTurn()
                 break;
             default:
 				dungeon.updateTextInfos("Erreur symbole non detecte");
+                dungeon.changeSelectedSymbolColor(newPosX, newPosY);
                 break;
             }
 

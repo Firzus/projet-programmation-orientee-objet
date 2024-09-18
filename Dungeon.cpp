@@ -70,17 +70,17 @@ void Dungeon::changeSelectedSymbolColor(int posX, int posY)
 
         SetConsoleTextAttribute(hConsole, color);
         std::cout << getEmptySpaceSymbol();
-        SetConsoleTextAttribute(hConsole, 7);
     }
     // If the symbol selected is a random character, change its color directly
     else 
     {
-        SetConsoleTextAttribute(hConsole, 6);
+        WORD color = (7 << 4) | 6;
+        SetConsoleTextAttribute(hConsole, color);
         std::cout << selectedSymbol;
-
-        // Reinitialize color
-        SetConsoleTextAttribute(hConsole, 7);
     }
+
+    // Reinitialize color
+    SetConsoleTextAttribute(hConsole, 7);
 
     // Put the cursor one line after its original position
     SetConsoleCursorPosition(hConsole, { static_cast<SHORT>(0), static_cast<SHORT>(originalPos.Y + 1) });
@@ -121,20 +121,18 @@ void Dungeon::updateGame()
         {
             char c = getCurrentRoom()[i][j];
 
-            // If the character is an empty space, color the background
-            if (c == getEmptySpaceSymbol())
-            {
-                WORD color = (7 << 4) | 7;
-                SetConsoleTextAttribute(hConsole, color);
-            }
-            else
-            {
-                SetConsoleTextAttribute(hConsole, 7);
-            }
+            WORD color = (7 << 4) | 0;
+            SetConsoleTextAttribute(hConsole, color);
+
+            // Print the character
             std::cout << c;
         }
+        // End of the string
         std::cout << std::endl;
     }
+
+    // Reinitialize color
+    SetConsoleTextAttribute(hConsole, 7);
 
 	// Affichage des infos
     for (int i = 0; i < infosList.size(); i++) {
