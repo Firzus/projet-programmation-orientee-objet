@@ -254,7 +254,10 @@ void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
     if (!areEnemiesRemaining()) {
         std::cout << "Tous les ennemis ont ete vaincus !" << std::endl;
 
+        // Go to the next room, get every entities, and reset player movement value
         dungeon.nextRoom();
+        getEntities();
+        hero.resetMovement();
     }
 }
 
@@ -361,6 +364,8 @@ void Game::playerTurn()
 
                 if (_getch() == 13)
                 {
+                    hero.reduceMovement(1);
+
                     // Get the ennemy the hero point at
                     Entity* ennemy = getEntityAtPosition(newPosX, newPosY);
 
