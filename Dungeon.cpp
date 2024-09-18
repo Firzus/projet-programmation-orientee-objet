@@ -53,6 +53,30 @@ void Dungeon::updateSymbolAtPosition(int x, int y, char symbol)
 	map[index][y][x] = symbol;
 }
 
+void Dungeon::changeSymbolColor(int posX, int posY)
+{
+    char selectedSymbol = map[index][posY][posX];
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Save the actual position of the cursor
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    COORD originalPos = consoleInfo.dwCursorPosition;
+
+    // Move the cursor to the symbol position
+    SetConsoleCursorPosition(hConsole, { static_cast<SHORT>(posX), static_cast<SHORT>(posY) });
+
+    // Change the symbol color and re-write it
+    SetConsoleTextAttribute(hConsole, 6);
+    std::cout << selectedSymbol;
+
+    // Reinitialize color
+    SetConsoleTextAttribute(hConsole, 7);
+
+    // Put the cursor one line after its original position
+    SetConsoleCursorPosition(hConsole, { static_cast<SHORT>(0), static_cast<SHORT>(originalPos.Y + 1) });
+}
+
 void Dungeon::nextRoom()
 {
 	if (index >= map.size()) {
@@ -99,7 +123,7 @@ char Dungeon::checkPosition(int posX, int posY)
 
     const std::vector<std::string>& currentRoom = map[index];
     if (posY < 0 || posY >= currentRoom.size() || posX < 0 || posX >= currentRoom[posY].size()) {
-        std::cerr << "Erreur : coordonnées invalides" << std::endl;
+        std::cerr << "Erreur : coordonnï¿½es invalides" << std::endl;
         return '\0';
     }
 

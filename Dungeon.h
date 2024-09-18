@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <windows.h>
 
 class Dungeon
 {
@@ -26,4 +27,5 @@ public:
 	std::vector<std::string> getCurrentRoom();
 	void updateMapAfterEntityDeath(int x, int y);
 	void updateSymbolAtPosition(int x, int y, char symbol);
+	void changeSymbolColor(int posX, int posY);
 };
