@@ -45,13 +45,13 @@ std::vector<std::string> Dungeon::getCurrentRoom()
 
 void Dungeon::updatePlayerPosition(int oldHeroPosX, int oldHeroPosY, int newHeroPosX, int newHeroPosY)
 {
-    map[index][oldHeroPosY][oldHeroPosX] = '.';
+    map[index][oldHeroPosY][oldHeroPosX] = getEmptySpaceSymbol();
     map[index][newHeroPosY][newHeroPosX] = '@';
 }
 
 void Dungeon::updateMapAfterEntityDeath(int x, int y)
 {
-	map[index][y][x] = '.';
+	map[index][y][x] = getEmptySpaceSymbol();
 }
 
 
@@ -68,12 +68,27 @@ void Dungeon::changeSymbolColor(int posX, int posY)
     // Move the cursor to the symbol position
     SetConsoleCursorPosition(hConsole, { static_cast<SHORT>(posX), static_cast<SHORT>(posY) });
 
-    // Change the symbol color and re-write it
-    SetConsoleTextAttribute(hConsole, 6);
-    std::cout << selectedSymbol;
+    // If the symbol selected is an emptySpace -> change background color to yellow
+    if (map[index][posY][posX] == getEmptySpaceSymbol())
+    {
+        // Fuse background and text color (background color is the one between brackets)
+        WORD color = (6 << 4) | 7;
 
-    // Reinitialize color
-    SetConsoleTextAttribute(hConsole, 7);
+        SetConsoleTextAttribute(hConsole, color);
+        std::cout << getEmptySpaceSymbol();
+        SetConsoleTextAttribute(hConsole, 7);
+    }
+    // If the symbol selected is a random character, change its color directly
+    else 
+    {
+        SetConsoleTextAttribute(hConsole, 6);
+        std::cout << selectedSymbol;
+
+        // Reinitialize color
+        SetConsoleTextAttribute(hConsole, 7);
+    }
+
+
 
     // Put the cursor one line after its original position
     SetConsoleCursorPosition(hConsole, { static_cast<SHORT>(0), static_cast<SHORT>(originalPos.Y + 1) });

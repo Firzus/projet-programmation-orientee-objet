@@ -11,6 +11,8 @@ class Dungeon
 	int index;
 	std::vector<std::vector<std::string>> map;
 	std::vector<std::string> infosList;
+	char wall = '#';
+	char emptySpace = ' ';
 
 public:
 	Dungeon();
@@ -28,4 +30,6 @@ public:
 	void updatePlayerPosition(int oldHeroPosX, int oldHeroPosY, int heroPosX, int heroPosY);
 	void updateMapAfterEntityDeath(int x, int y);
 	void changeSymbolColor(int posX, int posY);
+	char getWallSymbol() const { return wall; }
+	char getEmptySpaceSymbol() const { return emptySpace; }
 };

@@ -82,8 +82,9 @@ void Game::playTurn()
 
             dungeon.changeSymbolColor(newPosX, newPosY);
 
+
             switch (symbol) {
-            case '.':
+            case ' ':
 				std::cout << "En attente de confirmation de deplacement (enter)" << std::endl;
 
                     if (_getch() == 13)
@@ -336,7 +337,7 @@ void Game::enemyTurn()
             // Exemple d'action : se déplacer aléatoirement
             int newX = spectre.getPosX() + (rand() % 3 - 1); // -1, 0, ou 1
             int newY = spectre.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
-            if (dungeon.checkPosition(newX, newY) == '.') {
+            if (dungeon.checkPosition(newX, newY) == dungeon.getEmptySpaceSymbol()) {
                 dungeon.updatePlayerPosition(spectre.getPosX(), spectre.getPosY(), newX, newY);
                 spectre.move(newX, newY);
             }
@@ -349,7 +350,7 @@ void Game::enemyTurn()
             // Exemple d'action : se déplacer aléatoirement
             int newX = golem.getPosX() + (rand() % 3 - 1); // -1, 0, ou 1
             int newY = golem.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
-            if (dungeon.checkPosition(newX, newY) == '.') {
+            if (dungeon.checkPosition(newX, newY) == dungeon.getEmptySpaceSymbol()) {
                 dungeon.updatePlayerPosition(golem.getPosX(), golem.getPosY(), newX, newY);
                 golem.move(newX, newY);
             }
@@ -362,7 +363,7 @@ void Game::enemyTurn()
             // Exemple d'action : se déplacer aléatoirement
             int newX = faucheur.getPosX() + (rand() % 3 - 1); // -1, 0, ou 1
             int newY = faucheur.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
-            if (dungeon.checkPosition(newX, newY) == '.') {
+            if (dungeon.checkPosition(newX, newY) == dungeon.getEmptySpaceSymbol()) {
                 dungeon.updatePlayerPosition(faucheur.getPosX(), faucheur.getPosY(), newX, newY);
                 faucheur.move(newX, newY);
             }
