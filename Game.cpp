@@ -332,12 +332,11 @@ void Game::playerTurn()
 
             char symbol = dungeon.checkPosition(newPosX, newPosY);
 
-            dungeon.changeSelectedSymbolColor(newPosX, newPosY);
-
             switch (symbol) {
             case ' ':
                 infos.addInfo("[Enter] -> move");
                 updateGame();
+                dungeon.changeSelectedSymbolColor(newPosX, newPosY);
 
                 if (_getch() == 13)
                 {
@@ -350,6 +349,7 @@ void Game::playerTurn()
             case '#':
                 infos.addInfo("Mur droit devant");
                 updateGame();
+                dungeon.changeSelectedSymbolColor(newPosX, newPosY);
 
                 break;
             case 'S':
@@ -357,6 +357,7 @@ void Game::playerTurn()
             case 'F':
                 infos.addInfo("[Enter] -> attack");
                 updateGame();
+                dungeon.changeSelectedSymbolColor(newPosX, newPosY);
 
                 if (_getch() == 13)
                 {
@@ -442,7 +443,7 @@ void Game::enemyTurn()
     // Parcourir tous les faucheurs
     for (Faucheur& faucheur : faucheurs) {
         if (!faucheur.isDead()) {
-            // Exemple d'action : se d�placer al�atoirement
+            // Exemple d'action : se déplacer aléatoirement
             int newX = faucheur.getPosX() + (rand() % 3 - 1); // -1, 0, ou 1
             int newY = faucheur.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
             if (dungeon.checkPosition(newX, newY) == dungeon.getEmptySpaceSymbol()) {
