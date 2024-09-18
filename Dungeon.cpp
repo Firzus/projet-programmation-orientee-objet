@@ -56,6 +56,11 @@ void Dungeon::updateMapAfterEntityDeath(int x, int y)
 
 void Dungeon::nextRoom()
 {
+	if (index >= map.size()) {
+		index = 0;
+		return;
+	}
+
 	index++;
 }
 
