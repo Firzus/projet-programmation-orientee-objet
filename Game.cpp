@@ -278,7 +278,7 @@ void Game::playerTurn()
         // Demande une action au joueur
         char action;
 
-        infos.addInfo("Choose action: [Arrow keys] -> choose direction");
+        infos.addInfo("Choose action: [Arrow keys] -> choose direction, [P] -> skip your turn");
         updateGame();
 
         action = _getch();
@@ -399,6 +399,15 @@ void Game::playerTurn()
             isWatchingLeft = false;
             isWatchingRight = false;
             isWatchingUp = false;
+        }
+        else if (action == 112) 
+        {
+            // Skip player's turn
+            infos.addInfo("You're skipping your turn.");
+            updateGame();
+
+            // Reduce hero movement to 0
+            hero.reduceMovement(hero.getMovement());
         }
         else {
             // - Invalid action
