@@ -318,7 +318,7 @@ void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
     removeEntityAtPosition(newPosX, newPosY);
 
     // 2. Remove the sylbol from the map
-    dungeon.updateMapAfterEntityDeath(newPosX, newPosY);
+    dungeon.updateSymbolAtPosition(newPosX, newPosY, '.');
 
     // Special Enemy Skill
     char enemySymbol = ennemy->getSymbol();
