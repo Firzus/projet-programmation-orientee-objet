@@ -9,6 +9,7 @@ class Dungeon
 {
 	int index;
 	std::vector<std::vector<std::string>> map;
+	std::vector<std::string> infosList;
 
 public:
 	Dungeon();
@@ -16,6 +17,8 @@ public:
 
 	void loadRoom();
 	void nextRoom();
+	void updateTextInfos(std::string info);
+	void updateGame();
 	char checkPosition(int posX, int posY);
 	std::vector<std::string> readRoom(std::string fileName);
 	int getIndex() const { return index; }

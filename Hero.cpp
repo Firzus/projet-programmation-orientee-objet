@@ -6,7 +6,7 @@ Hero::Hero()
 	life = 300;
 	maxLife = 300;
 	power = 50;
-	movement = 3;
+	maxMovement = 3;
 }
 
 Hero::~Hero() {}

@@ -64,6 +64,33 @@ void Dungeon::nextRoom()
 	index++;
 }
 
+void Dungeon::updateTextInfos(std::string info)
+{
+    infosList.push_back(info);
+
+	if (infosList.size() > 5) {
+		infosList.erase(infosList.begin());
+	}
+
+	updateGame();
+}
+
+void Dungeon::updateGame()
+{
+	// Clear console
+	system("cls");
+
+	// Affichage de la room
+    for (int i = 0; i < getCurrentRoom().size(); i++) {
+        std::cout << getCurrentRoom()[i] << std::endl;
+    }
+
+	// Affichage des infos
+    for (int i = 0; i < infosList.size(); i++) {
+        std::cout << infosList[i] << std::endl;
+    }
+}
+
 char Dungeon::checkPosition(int posX, int posY)
 {
     if (index < 0 || index >= map.size()) {

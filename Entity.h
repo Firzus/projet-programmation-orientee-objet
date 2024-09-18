@@ -13,6 +13,7 @@ protected:
 	int life;
 	int power;
 	int movement;
+	int maxMovement;
 
 public:
 	Entity();
@@ -35,4 +36,10 @@ public:
 
 	int getPosX() const { return posX; }
 	int getPosY() const { return posY; }
+
+	int getMovement() const { return movement; }
+	void reduceMovement() { movement--; }
+	void resetMovement() { movement = maxMovement; }
+
+	int getMaxMovement() const { return maxMovement; }
 };
