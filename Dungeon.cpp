@@ -68,6 +68,11 @@ void Dungeon::changeSymbolColor(int posX, int posY)
 
 void Dungeon::nextRoom()
 {
+	if (index >= map.size()) {
+		index = 0;
+		return;
+	}
+
 	index++;
 }
 

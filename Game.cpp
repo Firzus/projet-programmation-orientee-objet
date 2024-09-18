@@ -127,7 +127,7 @@ void Game::playTurn()
 					}
 
                     // Sleep
-                    std::this_thread::sleep_for(std::chrono::seconds(5));
+                    std::this_thread::sleep_for(std::chrono::seconds(2));
                 }
                 else return;
 
@@ -144,15 +144,8 @@ void Game::playTurn()
             isWatchingUp = false;
         }
         else {
-            // Autres touches
-            switch (action) {
-            case 112:
-                isPlaying = false;
-                break;
-            default:
-                std::cout << "Invalid action! Please try again." << std::endl;
-                break;
-            }
+			// - Invalid action
+            std::cout << "Invalid action! Please try again." << std::endl;
         }
     }
 }
@@ -311,4 +304,21 @@ void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
     default:
         break;
     }
+
+    if (!areEnemiesRemaining()) {
+        std::cout << "Tous les ennemis ont été vaincus !" << std::endl;
+
+		dungeon.nextRoom();
+    }
+}
+
+bool Game::areEnemiesRemaining() {
+    for (const auto& row : dungeon.getCurrentRoom()) {
+        for (const auto& cell : row) {
+            if (cell == 'S' || cell == 'G' || cell == 'F') {
+                return true;
+            }
+        }
+    }
+    return false;
 }

@@ -35,4 +35,5 @@ public:
 	Entity* getEntityAtPosition(int x, int y);
 	void removeEntityAtPosition(int x, int y);
 	void removeEnnemy(Entity* ennemy, int newPosX, int newPosY);
+	bool areEnemiesRemaining();
 };
