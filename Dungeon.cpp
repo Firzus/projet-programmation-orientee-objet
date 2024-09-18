@@ -88,8 +88,10 @@ void Dungeon::changeSelectedSymbolColor(int posX, int posY)
 
 void Dungeon::nextRoom()
 {
-	if (index >= map.size()) {
+	if (index >= map.size() - 1) {
 		index = 0;
+        map.clear();
+        loadRoom();
 		return;
 	}
 
