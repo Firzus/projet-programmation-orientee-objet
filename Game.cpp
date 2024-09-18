@@ -26,8 +26,6 @@ void Game::playTurn()
         dungeon.updateTextInfos("Tour du joueur");
         playerTurn();
 
-        dungeon.changeSelectedSymbolColor(newPosX, newPosY);
-
 		// Tour des ennemis
 		dungeon.updateTextInfos("Tour des ennemis");
         enemyTurn();
@@ -129,7 +127,7 @@ void Game::updateEntityPosition(Entity* entity, int posX, int posY, int newPosX,
 	case 'S': {
 		for (Spectre& spectre : spectres) {
 			if (spectre.getPosX() == posX && spectre.getPosY() == posY) {
-				dungeon.updateSymbolAtPosition(posX, posY, '.');
+				dungeon.updateSymbolAtPosition(posX, posY, dungeon.getEmptySpaceSymbol());
 				dungeon.updateSymbolAtPosition(newPosX, newPosY, spectre.getSymbol());
 				spectre.move(newPosX, newPosY);
 			}
@@ -139,7 +137,7 @@ void Game::updateEntityPosition(Entity* entity, int posX, int posY, int newPosX,
 	case 'G': {
 		for (Golem& golem : golems) {
 			if (golem.getPosX() == posX && golem.getPosY() == posY) {
-				dungeon.updateSymbolAtPosition(posX, posY, '.');
+				dungeon.updateSymbolAtPosition(posX, posY, dungeon.getEmptySpaceSymbol());
 				dungeon.updateSymbolAtPosition(newPosX, newPosY, golem.getSymbol());
 				golem.move(newPosX, newPosY);
 			}
@@ -149,7 +147,7 @@ void Game::updateEntityPosition(Entity* entity, int posX, int posY, int newPosX,
 	case 'F': {
 		for (Faucheur& faucheur : faucheurs) {
 			if (faucheur.getPosX() == posX && faucheur.getPosY() == posY) {
-                dungeon.updateSymbolAtPosition(posX, posY, '.');
+                dungeon.updateSymbolAtPosition(posX, posY, dungeon.getEmptySpaceSymbol());
                 dungeon.updateSymbolAtPosition(newPosX, newPosY, faucheur.getSymbol());
 				faucheur.move(newPosX, newPosY);
 			}
@@ -157,7 +155,7 @@ void Game::updateEntityPosition(Entity* entity, int posX, int posY, int newPosX,
 		break;
 	}
 	case '@' : {
-		dungeon.updateSymbolAtPosition(posX, posY, '.');
+		dungeon.updateSymbolAtPosition(posX, posY, dungeon.getEmptySpaceSymbol());
         dungeon.updateSymbolAtPosition(newPosX, newPosY, hero.getSymbol());
 		hero.move(newPosX, newPosY);
 		break;
@@ -203,7 +201,7 @@ void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
     removeEntityAtPosition(newPosX, newPosY);
 
     // 2. Remove the sylbol from the map
-    dungeon.updateSymbolAtPosition(newPosX, newPosY, '.');
+    dungeon.updateSymbolAtPosition(newPosX, newPosY, dungeon.getEmptySpaceSymbol());
 
     // Special Enemy Skill
     char enemySymbol = ennemy->getSymbol();
@@ -316,10 +314,10 @@ void Game::playerTurn()
 
             char symbol = dungeon.checkPosition(newPosX, newPosY);
 
-            dungeon.changeSymbolColor(newPosX, newPosY);
+            dungeon.changeSelectedSymbolColor(newPosX, newPosY);
 
             switch (symbol) {
-            case '.':
+            case ' ':
 				dungeon.updateTextInfos("En attente de confirmation de deplacement (enter)");
 
                 if (_getch() == 13)
