@@ -86,12 +86,8 @@ void Game::playTurn()
 
                     if (_getch() == 13)
                     {
-                        // Update player position
-                        dungeon.updatePlayerPosition(hero.getPosX(), hero.getPosY(), newPosX, newPosY);
-
-                        hero.move(newPosX, newPosY);
-
-                        std::cout << "New Post : " << hero.getPosX() << " " << hero.getPosY() << std::endl;
+						updateEntityPosition(&hero, hero.getPosX(), hero.getPosY(), newPosX, newPosY);
+                        hero.reduceMovement(1);
                     }
                     else return;
 
@@ -238,6 +234,52 @@ Entity* Game::getEntityAtPosition(int x, int y)
     return nullptr;
 }
 
+void Game::updateEntityPosition(Entity* entity, int posX, int posY, int newPosX, int newPosY)
+{
+	char symbol = dungeon.getCurrentRoom()[posY][posX];
+
+	switch (symbol) {
+	case 'S': {
+		for (Spectre& spectre : spectres) {
+			if (spectre.getPosX() == posX && spectre.getPosY() == posY) {
+				dungeon.updateSymbolAtPosition(posX, posY, '.');
+				dungeon.updateSymbolAtPosition(newPosX, newPosY, spectre.getSymbol());
+				spectre.move(newPosX, newPosY);
+			}
+		}
+		break;
+	}
+	case 'G': {
+		for (Golem& golem : golems) {
+			if (golem.getPosX() == posX && golem.getPosY() == posY) {
+				dungeon.updateSymbolAtPosition(posX, posY, '.');
+				dungeon.updateSymbolAtPosition(newPosX, newPosY, golem.getSymbol());
+				golem.move(newPosX, newPosY);
+			}
+		}
+		break;
+	}
+	case 'F': {
+		for (Faucheur& faucheur : faucheurs) {
+			if (faucheur.getPosX() == posX && faucheur.getPosY() == posY) {
+                dungeon.updateSymbolAtPosition(posX, posY, '.');
+                dungeon.updateSymbolAtPosition(newPosX, newPosY, faucheur.getSymbol());
+				faucheur.move(newPosX, newPosY);
+			}
+		}
+		break;
+	}
+	case '@' : {
+		dungeon.updateSymbolAtPosition(posX, posY, '.');
+        dungeon.updateSymbolAtPosition(newPosX, newPosY, hero.getSymbol());
+		hero.move(newPosX, newPosY);
+		break;
+	}
+	default:
+		break;
+	}
+}
+
 void Game::removeEntityAtPosition(int x, int y)
 {
     char symbol = dungeon.getCurrentRoom()[y][x];
@@ -283,12 +325,12 @@ void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
     case 'S':
         // Restaure les PV du héros
         hero.setLife(hero.getMaxLife());
-		std::cout << "Le héros vient de restaurer ses points de vie" << std::endl;
+		dungeon.updateTextInfos("Le héros vient de restaurer ses points de vie");
         break;
     case 'G':
         // + 20 Puissance au héros
         hero.buffPower(20);
-        std::cout << "Le héros a maintenant " << hero.getPower() << " points de puissance." << std::endl;
+        dungeon.updateTextInfos("Le héros vient de gagner 20 points de puissance");
         break;
     case 'F':
         // -50 Points de vie à tout les monstres
@@ -302,6 +344,8 @@ void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
                 }
             }
         }
+
+        dungeon.updateTextInfos("Tous les ennemis viennent de perdre 50 points de vie");
 
         break;
     default:
@@ -328,15 +372,15 @@ bool Game::areEnemiesRemaining() {
 
 void Game::enemyTurn()
 {
-    // Parcourir tous les spectres
+	// Parcourir tous les spectres
     for (Spectre& spectre : spectres) {
         if (!spectre.isDead()) {
-            // Exemple d'action : se déplacer aléatoirement
             int newX = spectre.getPosX() + (rand() % 3 - 1); // -1, 0, ou 1
             int newY = spectre.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
             if (dungeon.checkPosition(newX, newY) == '.') {
-                dungeon.updatePlayerPosition(spectre.getPosX(), spectre.getPosY(), newX, newY);
-                spectre.move(newX, newY);
+                updateEntityPosition(&spectre, spectre.getPosX(), spectre.getPosY(), newX, newY);
+
+                std::this_thread::sleep_for(std::chrono::seconds(1));
             }
         }
     }
@@ -348,8 +392,9 @@ void Game::enemyTurn()
             int newX = golem.getPosX() + (rand() % 3 - 1); // -1, 0, ou 1
             int newY = golem.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
             if (dungeon.checkPosition(newX, newY) == '.') {
-                dungeon.updatePlayerPosition(golem.getPosX(), golem.getPosY(), newX, newY);
-                golem.move(newX, newY);
+                updateEntityPosition(&golem, golem.getPosX(), golem.getPosY(), newX, newY);
+
+                std::this_thread::sleep_for(std::chrono::seconds(1));
             }
         }
     }
@@ -361,8 +406,9 @@ void Game::enemyTurn()
             int newX = faucheur.getPosX() + (rand() % 3 - 1); // -1, 0, ou 1
             int newY = faucheur.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
             if (dungeon.checkPosition(newX, newY) == '.') {
-                dungeon.updatePlayerPosition(faucheur.getPosX(), faucheur.getPosY(), newX, newY);
-                faucheur.move(newX, newY);
+                updateEntityPosition(&faucheur, faucheur.getPosX(), faucheur.getPosY(), newX, newY);
+          
+                std::this_thread::sleep_for(std::chrono::seconds(1));
             }
         }
     }

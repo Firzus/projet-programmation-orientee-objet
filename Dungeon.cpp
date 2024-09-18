@@ -43,15 +43,14 @@ std::vector<std::string> Dungeon::getCurrentRoom()
     return map[index];
 }
 
-void Dungeon::updatePlayerPosition(int oldHeroPosX, int oldHeroPosY, int newHeroPosX, int newHeroPosY)
-{
-    map[index][oldHeroPosY][oldHeroPosX] = '.';
-    map[index][newHeroPosY][newHeroPosX] = '@';
-}
-
 void Dungeon::updateMapAfterEntityDeath(int x, int y)
 {
 	map[index][y][x] = '.';
+}
+
+void Dungeon::updateSymbolAtPosition(int x, int y, char symbol)
+{
+	map[index][y][x] = symbol;
 }
 
 void Dungeon::nextRoom()
