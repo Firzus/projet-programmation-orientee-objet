@@ -6,7 +6,7 @@ Spectre::Spectre()
 	life = 50;
 	maxLife = 50;
 	power = 25;
-	movement = 2;
+	maxMovement = 2;
 }
 
 Spectre::~Spectre() {}

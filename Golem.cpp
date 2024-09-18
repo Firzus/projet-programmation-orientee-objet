@@ -6,7 +6,7 @@ Golem::Golem()
 	life = 150;
 	maxLife = 150;
 	power = 50;
-	movement = 3;
+	maxMovement = 3;
 }
 
 Golem::~Golem() {}

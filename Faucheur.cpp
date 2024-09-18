@@ -6,7 +6,7 @@ Faucheur::Faucheur()
 	life = 100;
 	maxLife = 100;
 	power = 75;
-	movement = 4;
+	maxMovement = 4;
 }
 
 Faucheur::~Faucheur() {}
