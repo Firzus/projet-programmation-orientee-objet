@@ -138,7 +138,7 @@ void Game::updateEntityPosition(Entity* entity, int posX, int posY, int newPosX,
     case 'S': {
         for (Spectre& spectre : spectres) {
             if (spectre.getPosX() == posX && spectre.getPosY() == posY) {
-                dungeon.updateSymbolAtPosition(posX, posY, '.');
+                dungeon.updateSymbolAtPosition(posX, posY, dungeon.getEmptySpaceSymbol());
                 dungeon.updateSymbolAtPosition(newPosX, newPosY, spectre.getSymbol());
                 spectre.move(newPosX, newPosY);
             }
@@ -148,7 +148,7 @@ void Game::updateEntityPosition(Entity* entity, int posX, int posY, int newPosX,
     case 'G': {
         for (Golem& golem : golems) {
             if (golem.getPosX() == posX && golem.getPosY() == posY) {
-                dungeon.updateSymbolAtPosition(posX, posY, '.');
+                dungeon.updateSymbolAtPosition(posX, posY, dungeon.getEmptySpaceSymbol());
                 dungeon.updateSymbolAtPosition(newPosX, newPosY, golem.getSymbol());
                 golem.move(newPosX, newPosY);
             }
@@ -158,7 +158,7 @@ void Game::updateEntityPosition(Entity* entity, int posX, int posY, int newPosX,
     case 'F': {
         for (Faucheur& faucheur : faucheurs) {
             if (faucheur.getPosX() == posX && faucheur.getPosY() == posY) {
-                dungeon.updateSymbolAtPosition(posX, posY, '.');
+                dungeon.updateSymbolAtPosition(posX, posY, dungeon.getEmptySpaceSymbol());
                 dungeon.updateSymbolAtPosition(newPosX, newPosY, faucheur.getSymbol());
                 faucheur.move(newPosX, newPosY);
             }
@@ -166,7 +166,7 @@ void Game::updateEntityPosition(Entity* entity, int posX, int posY, int newPosX,
         break;
     }
     case '@': {
-        dungeon.updateSymbolAtPosition(posX, posY, '.');
+        dungeon.updateSymbolAtPosition(posX, posY, dungeon.getEmptySpaceSymbol());
         dungeon.updateSymbolAtPosition(newPosX, newPosY, hero.getSymbol());
         hero.move(newPosX, newPosY);
         break;
@@ -212,7 +212,7 @@ void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
     removeEntityAtPosition(newPosX, newPosY);
 
     // 2. Remove the sylbol from the map
-    dungeon.updateSymbolAtPosition(newPosX, newPosY, '.');
+    dungeon.updateSymbolAtPosition(newPosX, newPosY, dungeon.getEmptySpaceSymbol());
 
     // Special Enemy Skill
     char enemySymbol = ennemy->getSymbol();
@@ -335,7 +335,7 @@ void Game::playerTurn()
             dungeon.changeSelectedSymbolColor(newPosX, newPosY);
 
             switch (symbol) {
-            case '.':
+            case ' ':
                 infos.addInfo("[Enter] -> move");
                 updateGame();
 
@@ -419,7 +419,7 @@ void Game::enemyTurn()
         if (!spectre.isDead()) {
             int newX = spectre.getPosX() + (rand() % 3 - 1); // -1, 0, ou 1
             int newY = spectre.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
-            if (dungeon.checkPosition(newX, newY) == '.') {
+            if (dungeon.checkPosition(newX, newY) == dungeon.getEmptySpaceSymbol()) {
                 updateEntityPosition(&spectre, spectre.getPosX(), spectre.getPosY(), newX, newY);
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
@@ -432,7 +432,7 @@ void Game::enemyTurn()
             // Exemple d'action : se d�placer al�atoirement
             int newX = golem.getPosX() + (rand() % 3 - 1); // -1, 0, ou 1
             int newY = golem.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
-            if (dungeon.checkPosition(newX, newY) == '.') {
+            if (dungeon.checkPosition(newX, newY) == dungeon.getEmptySpaceSymbol()) {
                 updateEntityPosition(&golem, golem.getPosX(), golem.getPosY(), newX, newY);
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
@@ -445,7 +445,7 @@ void Game::enemyTurn()
             // Exemple d'action : se d�placer al�atoirement
             int newX = faucheur.getPosX() + (rand() % 3 - 1); // -1, 0, ou 1
             int newY = faucheur.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
-            if (dungeon.checkPosition(newX, newY) == '.') {
+            if (dungeon.checkPosition(newX, newY) == dungeon.getEmptySpaceSymbol()) {
                 updateEntityPosition(&faucheur, faucheur.getPosX(), faucheur.getPosY(), newX, newY);
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
