@@ -118,7 +118,6 @@ void Dungeon::updateRoom()
 
     // Reinitialize color
     SetConsoleTextAttribute(hConsole, 7);
-
 }
 
 char Dungeon::checkPosition(int posX, int posY)
