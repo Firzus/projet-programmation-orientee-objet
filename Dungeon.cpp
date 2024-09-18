@@ -54,6 +54,18 @@ void Dungeon::updateMapAfterEntityDeath(int x, int y)
 	map[index][y][x] = '.';
 }
 
+void Dungeon::changeSymbolColor(int posX, int posY)
+{
+    char selectedSymbol = map[index][posY][posX];
+
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 6);
+
+    map[index][posY][posX] = selectedSymbol;
+
+    SetConsoleTextAttribute(hConsole, 7);
+}
+
 void Dungeon::nextRoom()
 {
 	index++;

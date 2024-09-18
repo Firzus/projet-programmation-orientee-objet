@@ -30,7 +30,7 @@ void Game::playTurn()
         // Demande une action au joueur
         char action;
 
-        std::cout << "Choose action: (arrow keys) move, (f)ight, (p)ause: ";
+        std::cout << "Choose action: [Arrow keys] -> choose direction, [Enter] -> move / attack: ";
         action = _getch();
 
         // Gestion des actions du joueur
@@ -81,6 +81,8 @@ void Game::playTurn()
 			}
 
             char symbol = dungeon.checkPosition(newPosX, newPosY);
+
+            dungeon.changeSymbolColor(newPosX, newPosY);
 
             switch (symbol) {
             case '.':
