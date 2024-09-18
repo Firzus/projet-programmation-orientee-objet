@@ -75,6 +75,8 @@ void Dungeon::changeSymbolColor(int posX, int posY)
 void Dungeon::nextRoom()
 {
 	if (index >= map.size()) {
+		updateTextInfos("Vous avez termine le donjon !");
+
 		index = 0;
 		return;
 	}

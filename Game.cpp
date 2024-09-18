@@ -261,7 +261,7 @@ void Game::playerTurn()
         // Demande une action au joueur
         char action;
 
-        dungeon.updateTextInfos("Choose action: [Arrow keys] -> choose direction, [Enter] -> move / attack:");
+        dungeon.updateTextInfos("Choose action: [Arrow keys] -> choose direction");
         
         action = _getch();
 
@@ -318,7 +318,7 @@ void Game::playerTurn()
 
             switch (symbol) {
             case '.':
-				dungeon.updateTextInfos("En attente de confirmation de deplacement (enter)");
+				dungeon.updateTextInfos("[Enter] -> move");
 
                 if (_getch() == 13)
                 {
@@ -329,13 +329,13 @@ void Game::playerTurn()
 
                 break;
             case '#':
-                dungeon.updateTextInfos("En attente de confirmation de deplacement (enter)");
+                dungeon.updateTextInfos("Mur droit devant");
               
                 break;
             case 'S':
             case 'G':
             case 'F':
-                dungeon.updateTextInfos("Vous confirmez attaquer la cible ? (enter)");
+                dungeon.updateTextInfos("[Enter] -> attack");
 
                 if (_getch() == 13)
                 {
@@ -358,7 +358,7 @@ void Game::playerTurn()
                     }
 
                     // Sleep
-                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
                 }
                 else return;
 
@@ -392,10 +392,9 @@ void Game::enemyTurn()
             int newY = spectre.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
             if (dungeon.checkPosition(newX, newY) == '.') {
                 updateEntityPosition(&spectre, spectre.getPosX(), spectre.getPosY(), newX, newY);
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
         }
-
-        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
     // Parcourir tous les golems
@@ -406,11 +405,9 @@ void Game::enemyTurn()
             int newY = golem.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
             if (dungeon.checkPosition(newX, newY) == '.') {
                 updateEntityPosition(&golem, golem.getPosX(), golem.getPosY(), newX, newY);
-
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
         }
-
-        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
     // Parcourir tous les faucheurs
@@ -421,11 +418,9 @@ void Game::enemyTurn()
             int newY = faucheur.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
             if (dungeon.checkPosition(newX, newY) == '.') {
                 updateEntityPosition(&faucheur, faucheur.getPosX(), faucheur.getPosY(), newX, newY);
-          
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
         }
-
-        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
     dungeon.updateGame();
