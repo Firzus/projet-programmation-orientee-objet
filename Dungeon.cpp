@@ -55,7 +55,7 @@ void Dungeon::updateMapAfterEntityDeath(int x, int y)
 }
 
 
-void Dungeon::changeSymbolColor(int posX, int posY)
+void Dungeon::changeSelectedSymbolColor(int posX, int posY)
 {
     char selectedSymbol = map[index][posY][posX];
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -88,8 +88,6 @@ void Dungeon::changeSymbolColor(int posX, int posY)
         SetConsoleTextAttribute(hConsole, 7);
     }
 
-
-
     // Put the cursor one line after its original position
     SetConsoleCursorPosition(hConsole, { static_cast<SHORT>(0), static_cast<SHORT>(originalPos.Y + 1) });
 }
@@ -120,9 +118,28 @@ void Dungeon::updateGame()
 	// Clear console
 	system("cls");
 
-	// Affichage de la room
-    for (int i = 0; i < getCurrentRoom().size(); i++) {
-        std::cout << getCurrentRoom()[i] << std::endl;
+    // Display the room
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    for (int i = 0; i < getCurrentRoom().size(); i++) 
+    {
+        // Check every character to see if they're an empty space
+        for (int j = 0; j < getCurrentRoom()[i].size() ; j++)
+        {
+            char c = getCurrentRoom()[i][j];
+
+            // If the character is an empty space, color the background
+            if (c == getEmptySpaceSymbol())
+            {
+                WORD color = (7 << 4) | 7;
+                SetConsoleTextAttribute(hConsole, color);
+            }
+            else
+            {
+                SetConsoleTextAttribute(hConsole, 7);
+            }
+            std::cout << c;
+        }
+        std::cout << std::endl;
     }
 
 	// Affichage des infos

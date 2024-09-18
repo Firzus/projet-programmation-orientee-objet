@@ -29,7 +29,7 @@ public:
 	std::vector<std::string> getCurrentRoom();
 	void updatePlayerPosition(int oldHeroPosX, int oldHeroPosY, int heroPosX, int heroPosY);
 	void updateMapAfterEntityDeath(int x, int y);
-	void changeSymbolColor(int posX, int posY);
+	void changeSelectedSymbolColor(int posX, int posY);
 	char getWallSymbol() const { return wall; }
 	char getEmptySpaceSymbol() const { return emptySpace; }
 };

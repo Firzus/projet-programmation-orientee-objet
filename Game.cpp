@@ -80,7 +80,7 @@ void Game::playTurn()
 
                 char symbol = dungeon.checkPosition(newPosX, newPosY);
 
-            dungeon.changeSymbolColor(newPosX, newPosY);
+            dungeon.changeSelectedSymbolColor(newPosX, newPosY);
 
 
             switch (symbol) {
