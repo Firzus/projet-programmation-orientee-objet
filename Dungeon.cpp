@@ -48,7 +48,8 @@ void Dungeon::updateSymbolAtPosition(int x, int y, char symbol)
 	map[index][y][x] = symbol;
 }
 
-void Dungeon::changeSymbolColor(int posX, int posY)
+
+void Dungeon::changeSelectedSymbolColor(int posX, int posY)
 {
     char selectedSymbol = map[index][posY][posX];
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -61,9 +62,22 @@ void Dungeon::changeSymbolColor(int posX, int posY)
     // Move the cursor to the symbol position
     SetConsoleCursorPosition(hConsole, { static_cast<SHORT>(posX), static_cast<SHORT>(posY) });
 
-    // Change the symbol color and re-write it
-    SetConsoleTextAttribute(hConsole, 6);
-    std::cout << selectedSymbol;
+    // If the symbol selected is an emptySpace -> change background color to yellow
+    if (map[index][posY][posX] == getEmptySpaceSymbol())
+    {
+        // Fuse background and text color (background color is the one between brackets)
+        WORD color = (6 << 4) | 7;
+
+        SetConsoleTextAttribute(hConsole, color);
+        std::cout << getEmptySpaceSymbol();
+    }
+    // If the symbol selected is a random character, change its color directly
+    else 
+    {
+        WORD color = (7 << 4) | 6;
+        SetConsoleTextAttribute(hConsole, color);
+        std::cout << selectedSymbol;
+    }
 
     // Reinitialize color
     SetConsoleTextAttribute(hConsole, 7);
@@ -84,9 +98,27 @@ void Dungeon::nextRoom()
 
 void Dungeon::updateRoom()
 {
-    for (int i = 0; i < getCurrentRoom().size(); i++) {
-        std::cout << getCurrentRoom()[i] << std::endl;
+   HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    for (int i = 0; i < getCurrentRoom().size(); i++) 
+    {
+        // Check every character to see if they're an empty space
+        for (int j = 0; j < getCurrentRoom()[i].size() ; j++)
+        {
+            char c = getCurrentRoom()[i][j];
+
+            WORD color = (7 << 4) | 0;
+            SetConsoleTextAttribute(hConsole, color);
+
+            // Print the character
+            std::cout << c;
+        }
+        // End of the string
+        std::cout << std::endl;
     }
+
+    // Reinitialize color
+    SetConsoleTextAttribute(hConsole, 7);
+
 }
 
 char Dungeon::checkPosition(int posX, int posY)

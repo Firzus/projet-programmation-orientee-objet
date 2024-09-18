@@ -10,6 +10,8 @@ class Dungeon
 {
 	int index;
 	std::vector<std::vector<std::string>> map;
+	char wall = '#';
+	char emptySpace = ' ';
 
 public:
 	Dungeon();
@@ -23,6 +25,8 @@ public:
 	int getIndex() const { return index; }
 	std::vector<std::vector<std::string>> getMap() { return map; }
 	std::vector<std::string> getCurrentRoom();
+	void changeSelectedSymbolColor(int posX, int posY);
+	char getWallSymbol() const { return wall; }
+	char getEmptySpaceSymbol() const { return emptySpace; }
 	void updateSymbolAtPosition(int x, int y, char symbol);
-	void changeSymbolColor(int posX, int posY);
 };
