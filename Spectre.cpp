@@ -7,6 +7,8 @@ Spectre::Spectre()
 	maxLife = 50;
 	power = 25;
 	maxMovement = 2;
+	skillCooldown = 2;
+	maxSkillCooldown = 2;
 }
 
 Spectre::~Spectre() {}

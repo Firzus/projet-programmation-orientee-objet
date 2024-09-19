@@ -85,7 +85,7 @@ void Game::updateGame()
     dungeon.updateRoom();
 
     // Affichage des infos
-    infos.updateInfos();
+    infos.updateInfos(hero.getPower(), hero.getLife(), hero.getMovement());
 }
 
 Entity* Game::getEntityAtPosition(int x, int y)
@@ -278,13 +278,11 @@ void Game::playerTurn()
     updateGame();
 
     while (hero.getMovement() > 0) {
-        // Demande une action au joueur
-        char action;
-
         infos.addInfo("Choose action: [Arrow keys] -> choose direction, [P] -> skip your turn");
         updateGame();
 
-        action = _getch();
+        // Demande une action au joueur
+        char action = _getch();
 
         // Gestion des actions du joueur
         if (action == -32) {
@@ -364,8 +362,6 @@ void Game::playerTurn()
 
                 if (_getch() == 13)
                 {
-                    hero.reduceMovement(1);
-
                     // Get the ennemy the hero point at
                     Entity* ennemy = getEntityAtPosition(newPosX, newPosY);
 
@@ -388,7 +384,7 @@ void Game::playerTurn()
                     }
 
                     // Sleep
-                    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
                 }
                 else return;
 
@@ -409,10 +405,8 @@ void Game::playerTurn()
         {
             // Skip player's turn
             infos.addInfo("You're skipping your turn.");
-            updateGame();
 
-            // Reduce hero movement to 0
-            hero.reduceMovement(hero.getMovement());
+			return;
         }
         else {
             // - Invalid action
@@ -431,41 +425,116 @@ void Game::enemyTurn()
 
     // Parcourir tous les spectres
     for (Spectre& spectre : spectres) {
-        if (!spectre.isDead()) {
-            int newX = spectre.getPosX() + (rand() % 3 - 1); // -1, 0, ou 1
-            int newY = spectre.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
-            if (dungeon.checkPosition(newX, newY) == dungeon.getEmptySpaceSymbol()) {
-                updateEntityPosition(&spectre, spectre.getPosX(), spectre.getPosY(), newX, newY);
-                std::this_thread::sleep_for(std::chrono::milliseconds(500));
-            }
+        if (spectre.isSkillReady())
+        {
+			while (spectre.getMovement() > 0)
+			{
+                moveAwayFromHero(spectre);
+
+                updateGame();
+			}
+
+			// Reset skill cooldown
+			spectre.resetSkillCooldown();
         }
+        else
+        {
+            while (spectre.getMovement() > 0)
+            {
+                moveTowardsHero(spectre);
+
+                updateGame();
+            }
+
+			// Update skill state
+			spectre.updateSkillState();
+        }
+
+        spectre.resetMovement();
     }
 
     // Parcourir tous les golems
     for (Golem& golem : golems) {
-        if (!golem.isDead()) {
-            // Exemple d'action : se d�placer al�atoirement
-            int newX = golem.getPosX() + (rand() % 3 - 1); // -1, 0, ou 1
-            int newY = golem.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
-            if (dungeon.checkPosition(newX, newY) == dungeon.getEmptySpaceSymbol()) {
-                updateEntityPosition(&golem, golem.getPosX(), golem.getPosY(), newX, newY);
-                std::this_thread::sleep_for(std::chrono::milliseconds(500));
-            }
+        moveTowardsHero(golem);
+
+        if (golem.isSkillReady())
+        {
+			// - Golem skill
+
+            // Reset skill cooldown
+            golem.resetSkillCooldown();
+        }
+        else {
+            // Update skill state
+            golem.updateSkillState();
         }
     }
 
     // Parcourir tous les faucheurs
     for (Faucheur& faucheur : faucheurs) {
-        if (!faucheur.isDead()) {
-            // Exemple d'action : se déplacer aléatoirement
-            int newX = faucheur.getPosX() + (rand() % 3 - 1); // -1, 0, ou 1
-            int newY = faucheur.getPosY() + (rand() % 3 - 1); // -1, 0, ou 1
-            if (dungeon.checkPosition(newX, newY) == dungeon.getEmptySpaceSymbol()) {
-                updateEntityPosition(&faucheur, faucheur.getPosX(), faucheur.getPosY(), newX, newY);
-                std::this_thread::sleep_for(std::chrono::milliseconds(500));
-            }
-        }
+        moveTowardsHero(faucheur);
     }
 
     updateGame();
+}
+
+void Game::moveTowardsHero(Entity& entity) {
+    int heroX = hero.getPosX();
+    int heroY = hero.getPosY();
+
+    int entityX = entity.getPosX();
+    int entityY = entity.getPosY();
+
+    int deltaX = heroX - entityX;
+    int deltaY = heroY - entityY;
+
+    int newPosX = entityX;
+    int newPosY = entityY;
+
+    if (abs(deltaX) > abs(deltaY)) {
+        newPosX += (deltaX > 0) ? 1 : -1;
+    }
+    else {
+        newPosY += (deltaY > 0) ? 1 : -1;
+    }
+
+    char symbol = dungeon.checkPosition(newPosX, newPosY);
+    if (symbol == ' ') {
+        updateEntityPosition(&entity, entityX, entityY, newPosX, newPosY);
+        entity.reduceMovement(1);
+    }
+    else if (symbol == '@') {
+        hero.takeDamage(entity.getPower());
+        infos.addInfo("Le Faucheur attaque le héros !");
+    }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+}
+
+void Game::moveAwayFromHero(Entity& entity) {
+    int heroX = hero.getPosX();
+    int heroY = hero.getPosY();
+    int entityX = entity.getPosX();
+    int entityY = entity.getPosY();
+
+    int deltaX = entityX - heroX;
+    int deltaY = entityY - heroY;
+
+    int newPosX = entityX;
+    int newPosY = entityY;
+
+    if (abs(deltaX) > abs(deltaY)) {
+        newPosX += (deltaX > 0) ? 1 : -1;
+    }
+    else {
+        newPosY += (deltaY > 0) ? 1 : -1;
+    }
+
+    char symbol = dungeon.checkPosition(newPosX, newPosY);
+    if (symbol == ' ') {
+        updateEntityPosition(&entity, entityX, entityY, newPosX, newPosY);
+        entity.reduceMovement(1);
+    }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
 }

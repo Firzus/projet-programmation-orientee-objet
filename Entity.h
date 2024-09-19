@@ -14,6 +14,8 @@ protected:
 	int power;
 	int movement;
 	int maxMovement;
+	int skillCooldown;
+	int maxSkillCooldown;
 
 public:
 	Entity();
@@ -23,6 +25,9 @@ public:
 	void move(int x, int y);
 	void takeDamage(int damage);
 	void buffPower(int powerBuff);
+	bool isSkillReady() const;
+	void resetSkillCooldown();
+	void updateSkillState();
 
 	// Getters and setters
 	int getPower() const { return power; }
@@ -39,6 +44,7 @@ public:
 
 	int getMovement() const { return movement; }
 	void reduceMovement(int amount) { movement -= amount; }
+	void boostMovement(int amount) { movement += amount; }
 	void resetMovement() { movement = maxMovement; }
 
 	int getMaxMovement() const { return maxMovement; }

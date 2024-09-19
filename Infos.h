@@ -13,6 +13,6 @@ public:
 	~Infos();
 
 	void addInfo(std::string info);
-	void updateInfos();
+	void updateInfos(int power, int life, int movement);
 };
 
