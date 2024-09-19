@@ -37,7 +37,7 @@ void Game::playTurn()
 void Game::endGame()
 {
     // Affiche un message de fin de jeu temporaire
-    infos.addInfo("Game Over !");
+    infos.addInfo("Game Over !", 4);
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
     init();;
@@ -222,13 +222,13 @@ void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
     case 'S':
         // Restaure les PV du h�ros
         hero.setLife(hero.getMaxLife());
-        infos.addInfo("Le heros vient de restaurer ses points de vie");
+        infos.addInfo("Le heros vient de restaurer ses points de vie", 10);
         updateGame();
         break;
     case 'G':
         // + 20 Puissance au h�ros
         hero.buffPower(20);
-        infos.addInfo("Le heros vient de gagner 20 points de puissance");
+        infos.addInfo("Le heros vient de gagner 20 points de puissance", 12);
         updateGame();
         break;
     case 'F':
@@ -244,7 +244,7 @@ void Game::removeEnnemy(Entity* ennemy, int newPosX, int newPosY)
             }
         }
 
-        infos.addInfo("Tous les ennemis viennent de perdre 50 points de vie");
+        infos.addInfo("Tous les ennemis viennent de perdre 50 points de vie", 6);
         updateGame();
 
         break;
@@ -275,13 +275,13 @@ bool Game::areEnemiesRemaining() {
 
 void Game::playerTurn()
 {
-    infos.addInfo("Tour du Joueur");
+    infos.addInfo("Tour du Joueur", 9);
     updateGame();
 
     hero.resetMovement();
 
     while (hero.getMovement() > 0) {
-        infos.addInfo("Choose action:\nSelect direction [Arrow keys]\nSkip your turn            [P]");
+        infos.addInfo("Choose action:\nSelect direction [Arrow keys]\nSkip your turn            [P]", 7);
         updateGame();
 
         // Demande une action au joueur
@@ -338,7 +338,7 @@ void Game::playerTurn()
 
             switch (symbol) {
             case ' ':
-                infos.addInfo("[Enter] -> move");
+                infos.addInfo("[Enter] -> move", 7);
                 updateGame();
                 dungeon.changeSelectedSymbolColor(newPosX, newPosY);
 
@@ -351,7 +351,7 @@ void Game::playerTurn()
 
                 break;
             case '#':
-                infos.addInfo("Mur droit devant");
+                infos.addInfo("Mur droit devant", 7);
                 updateGame();
                 dungeon.changeSelectedSymbolColor(newPosX, newPosY);
 
@@ -359,7 +359,7 @@ void Game::playerTurn()
             case 'S':
             case 'G':
             case 'F':
-                infos.addInfo("[Enter] -> attack");
+                infos.addInfo("[Enter] -> attack", 7);
                 updateGame();
                 dungeon.changeSelectedSymbolColor(newPosX, newPosY);
 
@@ -371,18 +371,18 @@ void Game::playerTurn()
                     // Attack the ennemy
                     ennemy->takeDamage(hero.getPower());
 
-                    infos.addInfo("Vous avez inflige " + std::to_string(hero.getPower()) + " a l'ennemi !");
+                    infos.addInfo("Vous avez inflige " + std::to_string(hero.getPower()) + " a l'ennemi !", 6);
                     updateGame();
 
                     // Remove the ennemy if dead
                     if (ennemy->isDead()) {
                         removeEnnemy(ennemy, newPosX, newPosY);
 
-                        infos.addInfo("L'ennemi est mort !");
+                        infos.addInfo("L'ennemi est mort !", 7);
                         updateGame();
                     }
                     else {
-                        infos.addInfo("L'ennemi a maintenant " + std::to_string(ennemy->getLife()) + " points de vie.");
+                        infos.addInfo("L'ennemi a maintenant " + std::to_string(ennemy->getLife()) + " points de vie.", 7);
                         updateGame();
                     }
 
@@ -393,7 +393,7 @@ void Game::playerTurn()
 
                 break;
             default:
-                infos.addInfo("Erreur symbole non detecte");
+                infos.addInfo("Erreur symbole non detecte", 7);
                 updateGame();
                 break;
             }
@@ -407,13 +407,13 @@ void Game::playerTurn()
         else if (action == 112) 
         {
             // Skip player's turn
-            infos.addInfo("You're skipping your turn.");
+            infos.addInfo("You're skipping your turn.", 7);
 
 			return;
         }
         else {
             // - Invalid action
-            infos.addInfo("Invalid action! Please try again.");
+            infos.addInfo("Invalid action! Please try again.", 7);
             updateGame();
         }
 
@@ -423,7 +423,7 @@ void Game::playerTurn()
 
 void Game::enemyTurn()
 {
-    infos.addInfo("Tour des ennemis");
+    infos.addInfo("Tour des ennemis", 4);
     updateGame();
 
     // Parcourir tous les spectres
@@ -438,7 +438,7 @@ void Game::enemyTurn()
 			int boostAmount = 3;
             spectre.boostMovement(boostAmount);
 
-            infos.addInfo(spectre.getName() + " : + " + std::to_string(boostAmount) + "PM");
+            infos.addInfo(spectre.getName() + " : + " + std::to_string(boostAmount) + "PM", 4);
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
             updateGame();
@@ -461,7 +461,7 @@ void Game::enemyTurn()
 
         // Attack
         if (isHeroInRange(spectre) && !spectre.getHasAttacked()) {
-            infos.addInfo("Le " + spectre.getName() + " vous a inflige " + std::to_string(spectre.getPower()) + " dommages");
+            infos.addInfo("Le " + spectre.getName() + " vous a inflige " + std::to_string(spectre.getPower()) + " dommages", 4);
 
             spectre.attack(hero);
             spectre.setHasAttacked(true);
@@ -479,7 +479,7 @@ void Game::enemyTurn()
         if (golem.isSkillReady())
         {
             // Golem skill
-            infos.addInfo("Golem : Immunise au prochain coup");
+            infos.addInfo("Golem : Immunise au prochain coup", 4);
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
             updateGame();
@@ -499,8 +499,9 @@ void Game::enemyTurn()
         }
 
         // Attack
-        if (isHeroInRange(golem) && !golem.getHasAttacked()) {
-            infos.addInfo("Le Golem vous a inflige " + std::to_string(golem.getPower()) + " dommages");
+        if (isHeroInRange(golem) && !golem.getHasAttacked()) 
+        {
+            infos.addInfo("Le Golem vous a inflige " + std::to_string(golem.getPower()) + " dommages", 4);
 
             golem.attack(hero);
             golem.setHasAttacked(true);
@@ -535,7 +536,7 @@ void Game::enemyTurn()
 
         // Attack
         if (isHeroInRange(faucheur) && !faucheur.getHasAttacked()) {
-            infos.addInfo("Le " + faucheur.getName() + " vous a inflige " + std::to_string(faucheur.getPower()) + " dommages");
+            infos.addInfo("Le " + faucheur.getName() + " vous a inflige " + std::to_string(faucheur.getPower()) + " dommages", 4);
 
             faucheur.attack(hero);
             faucheur.setHasAttacked(true);
