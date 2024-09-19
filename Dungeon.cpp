@@ -1,13 +1,15 @@
 #include "Dungeon.h"
 
-Dungeon::Dungeon()
-{
-    index = 0;
-
-	loadRoom();
-}
+Dungeon::Dungeon(){}
 
 Dungeon::~Dungeon(){}
+
+void Dungeon::init()
+{
+    index = 0;
+	map.clear();
+    loadRoom();
+}
 
 void Dungeon::loadRoom()
 {

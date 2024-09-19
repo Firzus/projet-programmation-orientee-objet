@@ -19,6 +19,7 @@ public:
 	Dungeon();
 	~Dungeon();
 
+	void init();
 	void loadRoom();
 	void nextRoom();
 	void updateRoom(int heroPosX, int heroPosY, int PM);

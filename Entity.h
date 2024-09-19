@@ -25,6 +25,7 @@ public:
 	Entity();
 	~Entity();
 
+	void init();
 	bool isDead() const;
 	void move(int x, int y);
 	virtual void takeDamage(int damage);

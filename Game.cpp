@@ -3,17 +3,22 @@
 Game::Game()
 {
     init();
-    playTurn();
 }
 
 Game::~Game() {}
 
 void Game::init()
 {
-    // - Initialize the dungeon
-    getEntities();
+	dungeon.init();
+    hero.init();
+	spectres.clear();
+	faucheurs.clear();
+	golems.clear();
 
+    getEntities();
     updateGame();
+
+    playTurn();
 }
 
 void Game::playTurn()
@@ -33,10 +38,9 @@ void Game::endGame()
 {
     // Affiche un message de fin de jeu temporaire
     infos.addInfo("Game Over !");
-    updateGame();
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
-    init();
-    playTurn();
+    init();;
 }
 
 void Game::getEntities()

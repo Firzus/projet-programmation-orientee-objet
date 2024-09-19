@@ -1,10 +1,17 @@
 #include "Entity.h"
 
-Entity::Entity() : hasAttacked(false) {}
+Entity::Entity() {}
 
 Entity::~Entity() {}
 
-bool Entity::isDead() const 
+void Entity::init()
+{
+	setLife(getMaxLife());
+	resetMovement();
+	setHasAttacked(false);
+}
+
+bool Entity::isDead() const
 {
 	if (life <= 0)
 	{
