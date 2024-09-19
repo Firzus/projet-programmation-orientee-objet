@@ -427,32 +427,42 @@ void Game::enemyTurn()
 
         spectre.resetMovement();
 
+        // Skill
         if (spectre.isSkillReady())
         {
-            infos.addInfo("Faucheur : + 2 PM");
+            // - Faucheur skill
+			int boostAmount = 3;
+            spectre.boostMovement(boostAmount);
+
+            infos.addInfo(spectre.getName() + " : + " + std::to_string(boostAmount) + "PM");
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
             updateGame();
 
-			while (spectre.getMovement() > 0)
-			{
-                moveAwayFromHero(spectre);
-
-                updateGame();
-			}
-
-			// Reset skill cooldown
-			spectre.resetSkillCooldown();
+            // Reset skill cooldown
+            spectre.resetSkillCooldown();
         }
-        else
+        else {
+            // Update skill state
+            spectre.updateSkillState();
+        }
+
+        // Movement
+        while (spectre.getMovement() > 0 && !isHeroInRange(spectre))
         {
-            while (spectre.getMovement() > 0)
-            {
-                moveTowardsHero(spectre);
+            moveTowardsHero(spectre);
 
-                updateGame();
-            }
+            updateGame();
+        }
 
-			// Update skill state
-			spectre.updateSkillState();
+        // Attack
+        if (isHeroInRange(spectre) && !spectre.getHasAttacked()) {
+            infos.addInfo("Le " + spectre.getName() + " vous a inflige " + std::to_string(spectre.getPower()) + " dommages");
+
+            spectre.attack(hero);
+            spectre.setHasAttacked(true);
+
+            updateGame();
         }
     }
 
@@ -461,25 +471,35 @@ void Game::enemyTurn()
 
         golem.resetMovement();
 
-   //     if (golem.isSkillReady())
-   //     {
-			//// - Golem skill
+        // Skill
+        if (golem.isSkillReady())
+        {
+            // Golem skill
+            infos.addInfo("Golem : Immunise au prochain coup");
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-   //         infos.addInfo("Golem : Immunisé au prochain coup");
-   //         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            updateGame();
 
-   //         updateGame();
-
-   //         golem.resetSkillCooldown();
-   //     } else {
-   //         // Update skill state
-   //         golem.updateSkillState();
-   //     }
+            golem.resetSkillCooldown();
+        }
+        else {
+            golem.updateSkillState();
+        }
 
         // Movement
-        while (golem.getMovement() > 0)
+        while (golem.getMovement() > 0 && !isHeroInRange(golem))
         {
             moveTowardsHero(golem);
+          
+            updateGame();
+        }
+
+        // Attack
+        if (isHeroInRange(golem) && !golem.getHasAttacked()) {
+            infos.addInfo("Le Golem vous a inflige " + std::to_string(golem.getPower()) + " dommages");
+
+            golem.attack(hero);
+            golem.setHasAttacked(true);
 
             updateGame();
         }
@@ -490,64 +510,35 @@ void Game::enemyTurn()
 
         faucheur.resetMovement();
 
-        if (faucheur.isSkillReady())
+        if (static_cast<double>(faucheur.getLife()) / faucheur.getMaxLife() <= 0.5)
         {
-            // - Faucheur skill
-			faucheur.boostMovement(2);
-
-            infos.addInfo("Faucheur : + 2 PM");
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
-            updateGame();
-
-            // Reset skill cooldown
-            faucheur.resetSkillCooldown();
+			// Skill
+            while (faucheur.getMovement() > 0)
+            {
+                moveAwayFromHero(faucheur);
+                updateGame();
+            }
         } else {
-            // Update skill state
-            faucheur.updateSkillState();
+            // Movement
+            while (faucheur.getMovement() > 0 && !isHeroInRange(faucheur))
+            {
+                moveTowardsHero(faucheur);
+                updateGame();
+            }
         }
 
-		// Movement
-        while (faucheur.getMovement() > 0)
-        {
-            moveTowardsHero(faucheur);
+        // Attack
+        if (isHeroInRange(faucheur) && !faucheur.getHasAttacked()) {
+            infos.addInfo("Le " + faucheur.getName() + " vous a inflige " + std::to_string(faucheur.getPower()) + " dommages");
+
+            faucheur.attack(hero);
+            faucheur.setHasAttacked(true);
 
             updateGame();
         }
     }
-}
 
-void Game::moveTowardsHero(Entity& entity) {
-    int heroX = hero.getPosX();
-    int heroY = hero.getPosY();
-
-    int entityX = entity.getPosX();
-    int entityY = entity.getPosY();
-
-    int deltaX = heroX - entityX;
-    int deltaY = heroY - entityY;
-
-    int newPosX = entityX;
-    int newPosY = entityY;
-
-    if (abs(deltaX) > abs(deltaY)) {
-        newPosX += (deltaX > 0) ? 1 : -1;
-    }
-    else {
-        newPosY += (deltaY > 0) ? 1 : -1;
-    }
-
-    char symbol = dungeon.checkPosition(newPosX, newPosY);
-    if (symbol == ' ') {
-        updateEntityPosition(&entity, entityX, entityY, newPosX, newPosY);
-        entity.reduceMovement(1);
-    }
-    else if (symbol == '@') {
-        hero.takeDamage(entity.getPower());
-        infos.addInfo("Le Faucheur attaque le héros !");
-    }
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	resetEnemyAttackFlags();
 }
 
 void Game::moveAwayFromHero(Entity& entity) {
@@ -576,4 +567,51 @@ void Game::moveAwayFromHero(Entity& entity) {
     }
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
+}
+
+void Game::moveTowardsHero(Entity& entity) {
+    int heroX = hero.getPosX();
+    int heroY = hero.getPosY();
+
+    int entityX = entity.getPosX();
+    int entityY = entity.getPosY();
+
+    int deltaX = heroX - entityX;
+    int deltaY = heroY - entityY;
+
+    int newPosX = entityX;
+    int newPosY = entityY;
+
+    if (abs(deltaX) > abs(deltaY)) {
+        newPosX += (deltaX > 0) ? 1 : -1;
+    }
+    else {
+        newPosY += (deltaY > 0) ? 1 : -1;
+    }
+
+    char symbol = dungeon.checkPosition(newPosX, newPosY);
+    if (symbol == ' ') {
+        updateEntityPosition(&entity, entityX, entityY, newPosX, newPosY);
+        entity.reduceMovement(1);
+    }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+}
+
+bool Game::isHeroInRange(const Entity& enemy) const {
+    int distanceX = abs(hero.getPosX() - enemy.getPosX());
+    int distanceY = abs(hero.getPosY() - enemy.getPosY());
+    return (distanceX == 1 && distanceY == 0) || (distanceX == 0 && distanceY == 1);
+}
+
+void Game::resetEnemyAttackFlags() {
+    for (Spectre& spectre : spectres) {
+        spectre.setHasAttacked(false);
+    }
+    for (Golem& golem : golems) {
+        golem.setHasAttacked(false);
+    }
+    for (Faucheur& faucheur : faucheurs) {
+        faucheur.setHasAttacked(false);
+    }
 }

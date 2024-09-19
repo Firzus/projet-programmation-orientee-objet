@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <string>
+#include <thread>
+#include <chrono>
 
 class Entity
 {
@@ -9,6 +11,7 @@ protected:
 	int posX;
 	int posY;
 	char symbol;
+	std::string name;
 	int maxLife;
 	int life;
 	int power;
@@ -16,6 +19,7 @@ protected:
 	int maxMovement;
 	int skillCooldown;
 	int maxSkillCooldown;
+	bool hasAttacked;
 
 public:
 	Entity();
@@ -28,6 +32,7 @@ public:
 	bool isSkillReady() const;
 	void resetSkillCooldown();
 	void updateSkillState();
+	virtual void attack(Entity& target);
 
 	// Getters and setters
 	int getPower() const { return power; }
@@ -39,6 +44,8 @@ public:
 
 	char getSymbol() const { return symbol; }
 
+	std::string getName() const { return name; }
+
 	int getPosX() const { return posX; }
 	int getPosY() const { return posY; }
 
@@ -48,4 +55,7 @@ public:
 	void resetMovement() { movement = maxMovement; }
 
 	int getMaxMovement() const { return maxMovement; }
+
+	void setHasAttacked(bool attacked) { hasAttacked = attacked; }
+	bool getHasAttacked() const { return hasAttacked; }
 };

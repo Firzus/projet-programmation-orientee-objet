@@ -2,6 +2,7 @@
 
 Hero::Hero()
 {
+	name = "Hero";
 	symbol = '@';
 	life = 300;
 	maxLife = 300;

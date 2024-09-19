@@ -2,13 +2,13 @@
 
 Golem::Golem()
 {
+	name = "Golem";
 	symbol = 'G';
 	life = 150;
 	maxLife = 150;
 	power = 50;
 	maxMovement = 3;
-	// TODO : Set the skill cooldown range
-	skillCooldown = 0; // 2
+	skillCooldown = 2;
 	maxSkillCooldown = 4;
 }
 

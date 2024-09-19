@@ -45,4 +45,6 @@ public:
 
 	void moveTowardsHero(Entity& entity);
 	void moveAwayFromHero(Entity& entity);
+	bool isHeroInRange(const Entity& enemy) const;
+	void resetEnemyAttackFlags();
 };

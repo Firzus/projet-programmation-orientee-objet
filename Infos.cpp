@@ -8,7 +8,7 @@ void Infos::addInfo(std::string info)
 {
 	infosList.push_back(info);
 
-	if (infosList.size() > 10) {
+	if (infosList.size() > 6) {
 		infosList.erase(infosList.begin());
 	}
 }

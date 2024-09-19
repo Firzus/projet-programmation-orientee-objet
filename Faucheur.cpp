@@ -2,6 +2,7 @@
 
 Faucheur::Faucheur()
 {
+	name = "Faucheur";
 	symbol = 'F';
 	life = 100;
 	maxLife = 100;

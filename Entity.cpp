@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity() {}
+Entity::Entity() : hasAttacked(false) {}
 
 Entity::~Entity() {}
 
@@ -56,4 +56,11 @@ void Entity::updateSkillState()
 	{
 		skillCooldown--;
 	}
+}
+
+void Entity::attack(Entity& target)
+{
+	target.takeDamage(this->getPower());
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 }
