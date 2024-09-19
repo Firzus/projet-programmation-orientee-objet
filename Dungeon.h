@@ -5,6 +5,8 @@
 #include <iostream>
 #include <fstream>
 #include <windows.h>
+#include <queue>
+#include <tuple>
 
 class Dungeon
 {
@@ -19,7 +21,7 @@ public:
 
 	void loadRoom();
 	void nextRoom();
-	void updateRoom();
+	void updateRoom(int heroPosX, int heroPosY, int PM);
 	char checkPosition(int posX, int posY);
 	std::vector<std::string> readRoom(std::string fileName);
 	int getIndex() const { return index; }
@@ -29,4 +31,5 @@ public:
 	char getWallSymbol() const { return wall; }
 	char getEmptySpaceSymbol() const { return emptySpace; }
 	void updateSymbolAtPosition(int x, int y, char symbol);
+	std::vector<std::vector<bool>> getSpacesPlayerCanMove(int heroPosX, int heroPosY, int PM);
 };

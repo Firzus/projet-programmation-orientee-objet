@@ -88,15 +88,17 @@ void Dungeon::changeSelectedSymbolColor(int posX, int posY)
 
 void Dungeon::nextRoom()
 {
-	if (index >= map.size()) {
+	if (index >= map.size() - 1) {
 		index = 0;
+        map.clear();
+        loadRoom();
 		return;
 	}
 
 	index++;
 }
 
-void Dungeon::updateRoom()
+void Dungeon::updateRoom(int heroPosX, int heroPosY, int PM)
 {
    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     for (int i = 0; i < getCurrentRoom().size(); i++) 
@@ -106,9 +108,17 @@ void Dungeon::updateRoom()
         {
             char c = getCurrentRoom()[i][j];
 
-            WORD color = (7 << 4) | 0;
-            SetConsoleTextAttribute(hConsole, color);
-
+            // Check if the space is a space that can be visited by the player
+            std::vector<std::vector<bool>> visited = getSpacesPlayerCanMove(heroPosX, heroPosY, PM);
+            if (visited[i][j])
+            {
+                // If the space can be visited with current MP, color it in blue
+                SetConsoleTextAttribute(hConsole, ((11 << 4) | 0));
+            }
+            else
+            {
+                SetConsoleTextAttribute(hConsole, ((7 << 4) | 0));
+            }
             // Print the character
             std::cout << c;
         }
@@ -134,4 +144,52 @@ char Dungeon::checkPosition(int posX, int posY)
     }
 
     return currentRoom[posY][posX];
+}
+
+
+
+std::vector<std::vector<bool>> Dungeon::getSpacesPlayerCanMove(int heroPosX, int heroPosY, int PM)
+{
+    const std::vector<std::pair<int, int>> directions = 
+    {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+    // Getting map height and width (only square map works for now)
+    int height = map[index].size();
+    int width = height > 0 ? map[index][0].size() : 0;
+
+    // Vector to store visited spaces to avoid loops
+    std::vector<std::vector<bool>> visited(height, std::vector<bool>(width, false));
+
+    // Creating a queue for BFS algorithm
+    std::queue<std::tuple<int, int, int>> q;
+
+    // Adding the space at player's position to visited spaces
+    q.push({ heroPosX, heroPosY, 0 });
+    visited[heroPosY][heroPosX] = true;
+
+    // Making a BFS algorithm to go through spaces starting at player's position
+    while (!q.empty()) {
+        std::tuple<int, int, int> currentSpace = q.front();
+        q.pop();
+
+        int x = std::get<0>(currentSpace);
+        int y = std::get<1>(currentSpace);
+        int currentPM = std::get<2>(currentSpace);
+
+        if (currentPM < PM) {
+            for (size_t i = 0; i < directions.size(); ++i)
+            {
+                int newX = x + directions[i].first;
+                int newY = y + directions[i].second;
+
+                if (newX >= 0 && newX < width && newY >= 0 && newY < height && map[index][newY][newX] == getEmptySpaceSymbol() && !visited[newY][newX]) 
+                {
+                    visited[newY][newX] = true;
+                    q.push({ newX, newY, currentPM + 1 });
+                }
+            }
+        }
+    }
+
+    return visited;
 }
