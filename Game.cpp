@@ -79,7 +79,7 @@ void Game::updateGame()
     system("cls");
 
     // Affichage de la room
-    dungeon.updateRoom();
+    dungeon.updateRoom(hero.getPosX(), hero.getPosY(), hero.getMovement());
 
     // Affichage des infos
     infos.updateInfos(hero.getPower(), hero.getLife(), hero.getMovement());
