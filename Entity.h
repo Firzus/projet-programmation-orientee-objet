@@ -23,7 +23,7 @@ public:
 
 	bool isDead() const;
 	void move(int x, int y);
-	void takeDamage(int damage);
+	virtual void takeDamage(int damage);
 	void buffPower(int powerBuff);
 	bool isSkillReady() const;
 	void resetSkillCooldown();
