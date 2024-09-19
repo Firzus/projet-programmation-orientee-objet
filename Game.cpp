@@ -19,9 +19,6 @@ void Game::init()
 void Game::playTurn()
 {
     while (!hero.isDead()) {
-        // Reinitialiser les PM du heros au d�but du tour
-        hero.resetMovement();
-
         // Tour du joueur
         playerTurn();
 
@@ -274,11 +271,13 @@ bool Game::areEnemiesRemaining() {
 
 void Game::playerTurn()
 {
-    infos.addInfo("Tour du joueur");
+    infos.addInfo("Tour du Joueur");
     updateGame();
 
+    hero.resetMovement();
+
     while (hero.getMovement() > 0) {
-        infos.addInfo("Choose action: [Arrow keys] -> choose direction, [P] -> skip your turn");
+        infos.addInfo("Choose action:\nSelect direction [Arrow keys]\nSkip your turn            [P]");
         updateGame();
 
         // Demande une action au joueur
@@ -425,8 +424,14 @@ void Game::enemyTurn()
 
     // Parcourir tous les spectres
     for (Spectre& spectre : spectres) {
+
+        spectre.resetMovement();
+
         if (spectre.isSkillReady())
         {
+            infos.addInfo("Faucheur : + 2 PM");
+            updateGame();
+
 			while (spectre.getMovement() > 0)
 			{
                 moveAwayFromHero(spectre);
@@ -449,33 +454,67 @@ void Game::enemyTurn()
 			// Update skill state
 			spectre.updateSkillState();
         }
-
-        spectre.resetMovement();
     }
 
     // Parcourir tous les golems
     for (Golem& golem : golems) {
-        moveTowardsHero(golem);
 
-        if (golem.isSkillReady())
+        golem.resetMovement();
+
+   //     if (golem.isSkillReady())
+   //     {
+			//// - Golem skill
+
+   //         infos.addInfo("Golem : Immunisé au prochain coup");
+   //         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+   //         updateGame();
+
+   //         golem.resetSkillCooldown();
+   //     } else {
+   //         // Update skill state
+   //         golem.updateSkillState();
+   //     }
+
+        // Movement
+        while (golem.getMovement() > 0)
         {
-			// - Golem skill
+            moveTowardsHero(golem);
 
-            // Reset skill cooldown
-            golem.resetSkillCooldown();
-        }
-        else {
-            // Update skill state
-            golem.updateSkillState();
+            updateGame();
         }
     }
 
     // Parcourir tous les faucheurs
     for (Faucheur& faucheur : faucheurs) {
-        moveTowardsHero(faucheur);
-    }
 
-    updateGame();
+        faucheur.resetMovement();
+
+        if (faucheur.isSkillReady())
+        {
+            // - Faucheur skill
+			faucheur.boostMovement(2);
+
+            infos.addInfo("Faucheur : + 2 PM");
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+            updateGame();
+
+            // Reset skill cooldown
+            faucheur.resetSkillCooldown();
+        } else {
+            // Update skill state
+            faucheur.updateSkillState();
+        }
+
+		// Movement
+        while (faucheur.getMovement() > 0)
+        {
+            moveTowardsHero(faucheur);
+
+            updateGame();
+        }
+    }
 }
 
 void Game::moveTowardsHero(Entity& entity) {
