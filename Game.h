@@ -42,4 +42,7 @@ public:
 	bool areEnemiesRemaining();
 	void playerTurn();
 	void enemyTurn();
+
+	void moveTowardsHero(Entity& entity);
+	void moveAwayFromHero(Entity& entity);
 };

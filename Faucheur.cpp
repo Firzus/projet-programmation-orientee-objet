@@ -7,6 +7,8 @@ Faucheur::Faucheur()
 	maxLife = 100;
 	power = 75;
 	maxMovement = 4;
+	skillCooldown = 3;
+	maxSkillCooldown = 3;
 }
 
 Faucheur::~Faucheur() {}

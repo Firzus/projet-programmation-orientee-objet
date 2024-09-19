@@ -32,3 +32,28 @@ void Entity::buffPower(int powerBuff)
 {
 	power += powerBuff;
 }
+
+bool Entity::isSkillReady() const
+{
+	if (skillCooldown == 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void Entity::resetSkillCooldown()
+{
+	skillCooldown = maxSkillCooldown;
+}
+
+void Entity::updateSkillState()
+{
+	if (skillCooldown > 0)
+	{
+		skillCooldown--;
+	}
+}

@@ -7,6 +7,8 @@ Golem::Golem()
 	maxLife = 150;
 	power = 50;
 	maxMovement = 3;
+	skillCooldown = 4;
+	maxSkillCooldown = 4;
 }
 
 Golem::~Golem() {}
