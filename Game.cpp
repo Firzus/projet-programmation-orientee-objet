@@ -518,7 +518,9 @@ void Game::enemyTurn()
                 moveAwayFromHero(faucheur);
                 updateGame();
             }
-        } else {
+        }
+        else
+        {
             // Movement
             while (faucheur.getMovement() > 0 && !isHeroInRange(faucheur))
             {
@@ -564,6 +566,10 @@ void Game::moveAwayFromHero(Entity& entity) {
     if (symbol == ' ') {
         updateEntityPosition(&entity, entityX, entityY, newPosX, newPosY);
         entity.reduceMovement(1);
+    }
+    else
+    {
+		entity.reduceMovement(1);
     }
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
