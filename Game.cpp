@@ -9,6 +9,8 @@ Game::~Game() {}
 
 void Game::init()
 {
+	isPlaying = true;
+
 	dungeon.init();
     hero.init();
 	spectres.clear();
@@ -16,6 +18,17 @@ void Game::init()
 	golems.clear();
 
     getEntities();
+
+    for (Spectre& spectre : spectres) {
+        spectre.init();
+    }
+    for (Golem& golem : golems) {
+        golem.init();
+    }
+    for (Faucheur& faucheur : faucheurs) {
+		faucheur.init();
+    }
+
     updateGame();
 
     playTurn();
@@ -593,12 +606,10 @@ void Game::moveTowardsHero(Entity& entity) {
     int newPosX = entityX;
     int newPosY = entityY;
 
-    // Tentative de mouvement horizontal
     if (abs(deltaX) > abs(deltaY)) {
         newPosX += (deltaX > 0) ? 1 : -1;
     }
     else {
-        // Tentative de mouvement vertical
         newPosY += (deltaY > 0) ? 1 : -1;
     }
 
@@ -607,47 +618,8 @@ void Game::moveTowardsHero(Entity& entity) {
         updateEntityPosition(&entity, entityX, entityY, newPosX, newPosY);
         entity.reduceMovement(1);
     }
-    else if (symbol == '#' || isAllyAtPosition(newPosX, newPosY)) {
-        // Contournement de l'obstacle ou de l'allié
-        if (abs(deltaX) > abs(deltaY)) {
-            // Tentative de mouvement vertical si obstacle horizontal
-            newPosX = entityX;
-            newPosY += (deltaY > 0) ? 1 : -1;
-        }
-        else {
-            // Tentative de mouvement horizontal si obstacle vertical
-            newPosX += (deltaX > 0) ? 1 : -1;
-            newPosY = entityY;
-        }
-
-        symbol = dungeon.checkPosition(newPosX, newPosY);
-        if (symbol == ' ') {
-            updateEntityPosition(&entity, entityX, entityY, newPosX, newPosY);
-            entity.reduceMovement(1);
-        }
-    }
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-}
-
-bool Game::isAllyAtPosition(int x, int y) {
-    // Vérifie si une entité alliée se trouve à la position donnée
-    for (const Spectre& spectre : spectres) {
-        if (spectre.getPosX() == x && spectre.getPosY() == y) {
-            return true;
-        }
-    }
-    for (const Golem& golem : golems) {
-        if (golem.getPosX() == x && golem.getPosY() == y) {
-            return true;
-        }
-    }
-    for (const Faucheur& faucheur : faucheurs) {
-        if (faucheur.getPosX() == x && faucheur.getPosY() == y) {
-            return true;
-        }
-    }
-    return false;
 }
 
 bool Game::isHeroInRange(const Entity& enemy) const {
